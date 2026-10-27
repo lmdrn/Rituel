@@ -52,7 +52,7 @@ enum Metrics {
     static let sectionSpacing: CGFloat = 22
 }
 
-/// Ombre douce et chaude, très diffuse.
+/// Ombre portée chaude, en deux couches : une proche et nette, une large et diffuse.
 struct SoftShadow: ViewModifier {
     var lifted = true
     @Environment(\.colorScheme) private var scheme
@@ -60,35 +60,58 @@ struct SoftShadow: ViewModifier {
     func body(content: Content) -> some View {
         let dark = scheme == .dark
         content
-            .shadow(color: dark ? .black.opacity(0.3) : Color(hex: 0x6B4A3F, opacity: 0.06), radius: 1, y: 1)
-            .shadow(color: dark ? .black.opacity(0.45) : Color(hex: 0x8A5E4E, opacity: lifted ? 0.16 : 0.1),
-                    radius: lifted ? 16 : 6, y: lifted ? 12 : 4)
+            .shadow(color: dark ? .black.opacity(0.35) : Color(hex: 0x7A5040, opacity: 0.1),
+                    radius: lifted ? 3 : 2, y: lifted ? 3 : 2)
+            .shadow(color: dark ? .black.opacity(0.55) : Color(hex: 0x8A5E4E, opacity: lifted ? 0.24 : 0.2),
+                    radius: lifted ? 22 : 8, y: lifted ? 16 : 6)
     }
 }
 
-/// Surface en relief doux : dégradé vertical, liseré lumineux en haut, ombre chaude.
+/// Teintes du relief « argile » : reflet clair en haut à gauche, ombre chaude en bas à droite.
+private struct ClayLight {
+    let highlight: Color
+    let shade: Color
+
+    init(_ scheme: ColorScheme) {
+        highlight = scheme == .dark ? .white.opacity(0.13) : .white.opacity(0.95)
+        shade = scheme == .dark ? .black.opacity(0.5) : Color(hex: 0x9C6F5C, opacity: 0.3)
+    }
+}
+
+extension Color {
+    /// Mélange opaque de deux couleurs, résolues pour le mode clair ou sombre courant.
+    func mixed(with other: Color, amount: Double, in environment: EnvironmentValues) -> Color {
+        let a = resolve(in: environment), b = other.resolve(in: environment)
+        let t = Float(min(1, max(0, amount)))
+        return Color(Color.Resolved(red: a.red + (b.red - a.red) * t,
+                                    green: a.green + (b.green - a.green) * t,
+                                    blue: a.blue + (b.blue - a.blue) * t))
+    }
+}
+
+/// Surface en relief « argile » : bombée, avec un liseré lumineux en haut, une ombre interne en bas
+/// et une ombre portée chaude.
 struct ClaySurface<S: InsettableShape>: ViewModifier {
     let shape: S
     var fill: Color = .surface
     @Environment(\.colorScheme) private var scheme
 
     func body(content: Content) -> some View {
+        let light = ClayLight(scheme)
         content
             .background {
-                ZStack {
-                    shape.fill(LinearGradient(colors: [.surfaceHigh, fill], startPoint: .top, endPoint: .bottom))
-                    shape.strokeBorder(
-                        LinearGradient(colors: [.white.opacity(scheme == .dark ? 0.08 : 0.9), .white.opacity(0)],
-                                       startPoint: .top, endPoint: .center),
-                        lineWidth: 1
+                shape
+                    .fill(
+                        LinearGradient(colors: [.surfaceHigh, fill], startPoint: .top, endPoint: .bottom)
+                            .shadow(.inner(color: light.highlight, radius: 2, x: 2, y: 3))
+                            .shadow(.inner(color: light.shade, radius: 12, x: -3, y: -8))
                     )
-                }
+                    .modifier(SoftShadow())
             }
-            .modifier(SoftShadow())
     }
 }
 
-/// Galet : forme bombée avec reflet en haut à gauche, utilisée pour les boutons.
+/// Galet : forme gonflée comme de l'argile, avec un reflet brillant, utilisée pour les boutons.
 struct Pebble<S: InsettableShape>: View {
     let shape: S
     var base: Color = .surface
@@ -96,23 +119,41 @@ struct Pebble<S: InsettableShape>: View {
     var tintOpacity: Double = 0.4
     var lifted = true
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.self) private var environment
 
     var body: some View {
-        let dark = scheme == .dark
+        let light = ClayLight(scheme)
+        let color = tint.map { base.mixed(with: $0, amount: tintOpacity, in: environment) } ?? base
         ZStack {
-            shape.fill(base)
-            if let tint { shape.fill(tint.opacity(tintOpacity)) }
-            shape.fill(LinearGradient(
-                colors: [.white.opacity(dark ? 0.12 : 0.55), .white.opacity(0), .black.opacity(dark ? 0.18 : 0.05)],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            ))
-            shape.strokeBorder(
-                LinearGradient(colors: [.white.opacity(dark ? 0.15 : 0.85), .white.opacity(0)],
-                               startPoint: .topLeading, endPoint: .center),
-                lineWidth: 1
+            shape.fill(
+                color
+                    .shadow(.inner(color: light.highlight, radius: 3, x: 3, y: 4))
+                    .shadow(.inner(color: light.shade, radius: lifted ? 7 : 5, x: -3, y: -5))
             )
+            // Reflet brillant, comme une lumière venant d'en haut à gauche.
+            shape.fill(EllipticalGradient(
+                colors: [.white.opacity(scheme == .dark ? 0.16 : 0.6), .white.opacity(0)],
+                center: UnitPoint(x: 0.32, y: 0.22), startRadiusFraction: 0, endRadiusFraction: 0.55
+            ))
+            .allowsHitTesting(false)
         }
         .modifier(SoftShadow(lifted: lifted))
+    }
+}
+
+/// Creux : forme enfoncée dans l'argile (pastilles, cases, pistes de progression).
+struct Well<S: Shape>: View {
+    let shape: S
+    var color: Color = .surface2
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        let light = ClayLight(scheme)
+        shape.fill(
+            color
+                .shadow(.inner(color: light.shade.opacity(scheme == .dark ? 0.9 : 0.75), radius: 2.5, x: 1.5, y: 2))
+                .shadow(.inner(color: light.highlight.opacity(0.8), radius: 1.5, x: -1, y: -1.5))
+        )
     }
 }
 

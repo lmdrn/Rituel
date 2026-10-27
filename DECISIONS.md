@@ -78,3 +78,23 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **Grand chiffre du score** : en terracotta `accentText` (le pêche n'est pas assez contrasté pour du texte). Les 20 points sont en pêche, et en soleil à partir du 15ᵉ.
 - **« Un mot pour ta semaine »** : `WeeklyNoteWriter` utilise Foundation Models (`LanguageModelSession`) sous `#if canImport(FoundationModels)` et `if #available(iOS 26.0, *)`. Le bloc n'apparaît que si le modèle est disponible (Apple Intelligence activé) **et** qu'il gère le français. Sinon il est masqué, comme le demande le brief. Le mot n'est écrit que sur demande (bouton « Écrire mon mot »), jamais automatiquement : la génération prend quelques secondes. Le tiret cadratin est remplacé par une virgule, comme sur le web. La consigne est construite par `RecapEngine.notePrompt` (testé). Sans prénom réglé, elle parle d'« une personne ».
 - **VoiceOver** : la carte score se lit d'un bloc. Chaque ligne de la grille se lit en une phrase (« Sommeil : lundi 7h30, mardi 8h »).
+
+## Étape 6 — Widgets
+
+- **Données** : le widget ouvre la même base SwiftData que l'app, dans l'App Group (`RituelStore.shared`, un seul conteneur par processus). `WidgetDataLoader` lit les habitudes et les entrées utiles (30 derniers jours, semaine et mois en cours), puis `WidgetData.build` (pur, testé) calcule les totaux, statuts, progressions et le score. Les données restent justes même si l'app n'a pas été ouverte.
+- **Timeline** : une entrée maintenant et une à minuit (calculée pour le nouveau jour), politique `.atEnd`. Toute saisie (app ou widget) recharge toutes les timelines.
+- **Saisie depuis le widget** : `LogHabitIntent` (`Button(intent:)`), toujours pour aujourd'hui. Non visible dans Raccourcis (`isDiscoverable = false`) ; les intents Siri arrivent à l'étape 7.
+- **Bouton rapide** (`HabitEngine.quickAction`, testé) : +1 pour un comptage. Le premier choix rapide pour une quantité qu'on additionne (+250). Pour une valeur du jour, le choix rapide le plus souvent noté ces 30 derniers jours, sinon celui qui est le plus proche de la cible (8h). Retaper la valeur du jour l'efface, comme dans l'app.
+- **Écritures** : `EntryWriter` supprime puis recrée l'entrée au lieu de la modifier. L'app et le widget gardent chacun des objets en mémoire, et une nouvelle ligne est toujours relue correctement par l'autre processus. Au retour au premier plan, l'app relit la base (les écrans sont recréés), ce qui remet le jour sélectionné à aujourd'hui.
+- **Widgets** :
+  - **Une habitude** (petit, configurable) : nom, total / cible, pastille de statut, gros galet de saisie. Par défaut, la première habitude.
+  - **Ma journée** (moyen et grand) : le moyen affiche les 4 premières habitudes en tuiles 2 × 2. Le grand affiche jusqu'à 7 habitudes et le score d'équilibre de la semaine.
+  - **Progression** (écran verrouillé, cercle et rectangle, configurable) : jauge de l'habitude choisie. Par défaut, la première habitude en quantité (Eau).
+- **Sans habitude** (widget posé avant le premier lancement) : « Ouvre Rituel pour créer tes habitudes. »
+
+## Relief « argile » renforcé (27 octobre 2026)
+
+- Léa trouvait le relief trop plat par rapport à sa référence. Les surfaces et les galets ont maintenant des **ombres internes** : un reflet clair en haut à gauche, une ombre chaude en bas à droite. Les galets ont aussi un reflet brillant, et l'ombre portée a deux couches (une proche, une large).
+- **Creux** (`Well`) : les petits éléments sont enfoncés dans la matière, c'est-à-dire les pastilles de statut, les cases de la mini-frise et de la grille, les pistes de progression, le fond des contrôles segmentés et les champs texte. Les pilules et barres remplies sont des galets.
+- Les galets n'ont plus de contour : le volume suffit à les détacher.
+- Le mélange de la teinte d'une habitude et de la surface est opaque (`Color.mixed`), pour que les ombres internes restent nettes.

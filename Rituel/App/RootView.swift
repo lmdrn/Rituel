@@ -25,8 +25,12 @@ enum RituelTab: CaseIterable, Identifiable {
 
 struct RootView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.scenePhase) private var scenePhase
     @State private var tab: RituelTab = .today
     @State private var startNewHabit = false
+    /// Change au retour au premier plan : les écrans relisent alors la base, que les widgets ont pu modifier.
+    @State private var refreshID = 0
+    @State private var wasInBackground = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -41,6 +45,7 @@ struct RootView: View {
                 case .habits: HabitsView(startNew: $startNewHabit)
                 }
             }
+            .id(refreshID)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             FloatingTabBar(selection: $tab)
@@ -49,6 +54,17 @@ struct RootView: View {
             ZStack {
                 Color.canvas.ignoresSafeArea()
                 SoftWaves()
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            switch phase {
+            case .background:
+                wasInBackground = true
+            case .active where wasInBackground:
+                wasInBackground = false
+                refreshID += 1
+            default:
+                break
             }
         }
         .task {

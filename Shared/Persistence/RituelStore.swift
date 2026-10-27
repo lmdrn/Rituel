@@ -65,6 +65,15 @@ struct HabitWriter {
 enum RituelStore {
     static let schema = Schema([Habit.self, Entry.self])
 
+    /// Conteneur unique du processus (app ou widget). Les deux ouvrent la même base dans l'App Group.
+    static let shared: ModelContainer = {
+        do {
+            return try makeContainer()
+        } catch {
+            fatalError("Impossible d'ouvrir la base Rituel : \(error)")
+        }
+    }()
+
     /// Base SwiftData dans l'App Group, lue et écrite par l'app et le widget.
     /// La synchro iCloud sera branchée à l'étape 8.
     static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
@@ -99,14 +108,10 @@ struct EntryWriter {
         let current = existing.max(by: { $0.updatedAt < $1.updatedAt })?.value ?? 0
         let value = HabitEngine.newValue(for: action, current: current)
 
-        if let keep = existing.first, value > 0 {
-            keep.value = value
-            keep.updatedAt = now
-            existing.dropFirst().forEach(context.delete)
-        } else {
-            existing.forEach(context.delete)
-            if value > 0 { context.insert(Entry(habitID: habitID, day: start, value: value, updatedAt: now)) }
-        }
+        // Supprimer puis recréer plutôt que modifier : l'app et le widget gardent chacun des objets en mémoire,
+        // et une nouvelle ligne est toujours relue correctement par l'autre processus.
+        existing.forEach(context.delete)
+        if value > 0 { context.insert(Entry(habitID: habitID, day: start, value: value, updatedAt: now)) }
         try? context.save()
         WidgetCenter.shared.reloadAllTimelines()
         return value

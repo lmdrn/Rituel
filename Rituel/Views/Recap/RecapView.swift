@@ -155,9 +155,14 @@ private struct ScoreDots: View {
         let on = Int((Double(score) / 5).rounded())
         HStack(spacing: 3) {
             ForEach(0..<20, id: \.self) { i in
-                Capsule()
-                    .fill(i < on ? (i >= 14 ? Color.sun : Color.accent) : Color.surface2)
-                    .frame(height: 10)
+                Group {
+                    if i < on {
+                        Pebble(shape: Capsule(), base: i >= 14 ? .sun : .accent, lifted: false)
+                    } else {
+                        Well(shape: Capsule())
+                    }
+                }
+                .frame(height: 10)
             }
         }
         .accessibilityHidden(true)
@@ -301,7 +306,7 @@ private struct HeatGrid: View {
             .minimumScaleFactor(0.6)
             .foregroundStyle(fg)
             .frame(maxWidth: .infinity, minHeight: 26)
-            .background(bg, in: shape)
+            .background { if state != .future { Well(shape: shape, color: bg) } }
             .overlay {
                 if state == .future {
                     shape.strokeBorder(Color.line, style: StrokeStyle(lineWidth: 1, dash: [3, 2]))

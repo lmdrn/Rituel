@@ -23,3 +23,6 @@ Config.local.xcconfig
 
 # macOS
 .DS_Store
+
+# markdown
+*.md

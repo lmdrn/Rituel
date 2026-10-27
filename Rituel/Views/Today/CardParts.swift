@@ -105,7 +105,7 @@ struct MiniWeek: View {
             .minimumScaleFactor(0.7)
             .foregroundStyle(fg)
             .frame(maxWidth: .infinity, minHeight: 22)
-            .background(bg, in: shape)
+            .background { if state != .future { Well(shape: shape, color: bg) } }
             .overlay {
                 if state == .future {
                     shape.strokeBorder(Color.line, style: StrokeStyle(lineWidth: 1, dash: [3, 2]))
@@ -133,9 +133,9 @@ struct ProgressView: View {
             case .bar(let fraction, let over):
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
-                        Capsule().fill(.surface2)
-                        Capsule().fill(over ? Color.over : tint)
-                            .frame(width: geo.size.width * fraction)
+                        Well(shape: Capsule())
+                        Pebble(shape: Capsule(), base: over ? .over : tint, lifted: false)
+                            .frame(width: max(fraction > 0 ? 10 : 0, geo.size.width * fraction))
                     }
                 }
                 .frame(height: 8)
@@ -149,13 +149,13 @@ struct ProgressView: View {
         let shape = Capsule()
         switch pip {
         case .empty:
-            shape.strokeBorder(tint.opacity(0.8), lineWidth: 1.5).frame(width: 22, height: 8)
+            Well(shape: shape).frame(width: 22, height: 10)
         case .on:
-            shape.fill(tint).frame(width: 22, height: 8)
+            Pebble(shape: shape, base: tint, lifted: false).frame(width: 22, height: 10)
         case .over:
-            shape.fill(Color.over).frame(width: 22, height: 8)
+            Pebble(shape: shape, base: .over, lifted: false).frame(width: 22, height: 10)
         case .bonus:
-            shape.fill(Color.ok).frame(width: 10, height: 8)
+            Pebble(shape: shape, base: .ok, lifted: false).frame(width: 12, height: 10)
         }
     }
 }

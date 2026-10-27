@@ -13,11 +13,7 @@ struct RituelApp: App {
             return
         }
         #endif
-        do {
-            container = try RituelStore.makeContainer()
-        } catch {
-            fatalError("Impossible d'ouvrir la base Rituel : \(error)")
-        }
+        container = RituelStore.shared
     }
 
     var body: some Scene {

@@ -26,7 +26,7 @@ struct RituelTextFieldStyle: ViewModifier {
             .tint(.accentText)
             .padding(.vertical, 13)
             .padding(.horizontal, 14)
-            .background(.surface, in: RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous))
+            .background { Well(shape: RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous), color: .surface) }
             .overlay {
                 RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous)
                     .strokeBorder(isFocused ? Color.accent : Color.line, lineWidth: 1.5)
@@ -81,7 +81,7 @@ struct ChoiceSegment<Value: Hashable>: View {
             }
         }
         .padding(4)
-        .background(.surface2, in: RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous))
+        .background { Well(shape: RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous)) }
         .animation(.easeOut(duration: 0.15), value: selection)
     }
 }

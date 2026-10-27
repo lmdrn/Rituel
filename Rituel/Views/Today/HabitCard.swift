@@ -143,7 +143,6 @@ private struct CounterFace: View {
         let side = size * min(scale, 1.35)
         ZStack {
             Pebble(shape: Circle(), base: .surface, tint: tint, tintOpacity: 0.45)
-            Circle().strokeBorder(tint.opacity(0.5), lineWidth: 1.5)
             VStack(spacing: 3) {
                 Text(verbatim: big)
                     .font(.rituel(.displayText, size: bigSize, relativeTo: .title3))
@@ -208,6 +207,6 @@ struct StatusChip: View {
         .foregroundStyle(colors.fg)
         .padding(.horizontal, 9)
         .padding(.vertical, 4)
-        .background(colors.bg, in: Capsule())
+        .background { Well(shape: Capsule(), color: colors.bg) }
     }
 }
