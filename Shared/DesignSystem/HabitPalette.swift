@@ -30,24 +30,25 @@ enum HabitColor: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    /// Versions pastel des 16 teintes du brief, accordées au thème (voir DECISIONS.md).
     var hex: UInt32 {
         switch self {
-        case .citron: 0xF7DC4A
-        case .soleil: 0xFFB627
-        case .mandarine: 0xFF8A3D
-        case .tomate: 0xF2553D
-        case .pivoine: 0xFF7AB6
-        case .lilas: 0xB9A2FF
-        case .violet: 0x7B61FF
-        case .pervenche: 0x7C93FF
-        case .bleu: 0x2F6BFF
-        case .ciel: 0x6CC8FF
-        case .lagon: 0x19B8B0
-        case .menthe: 0x3DD598
-        case .pomme: 0xA3DB4D
-        case .sable: 0xD8C29C
-        case .ardoise: 0x7A8296
-        case .encre: 0x2A2A2E
+        case .citron: 0xEFD77A
+        case .soleil: 0xF2C26B
+        case .mandarine: 0xF0A47A
+        case .tomate: 0xE58A7A
+        case .pivoine: 0xEBA3BE
+        case .lilas: 0xC3B2E8
+        case .violet: 0x9E8FD6
+        case .pervenche: 0x9DAEE3
+        case .bleu: 0x7F9FD6
+        case .ciel: 0x9CCBE6
+        case .lagon: 0x7CC3BC
+        case .menthe: 0x8CCFAE
+        case .pomme: 0xB9D98C
+        case .sable: 0xD9C6A5
+        case .ardoise: 0x9AA0AE
+        case .encre: 0x5A5560
         }
     }
 

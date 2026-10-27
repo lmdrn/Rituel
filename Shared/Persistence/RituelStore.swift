@@ -1,0 +1,70 @@
+import Foundation
+import SwiftData
+import WidgetKit
+
+enum SharedDefaults {
+    /// Réglages partagés entre l'app et le widget.
+    static var store: UserDefaults { UserDefaults(suiteName: AppConfig.appGroup) ?? .standard }
+
+    static let firstNameKey = "firstName"
+}
+
+enum RituelStore {
+    static let schema = Schema([Habit.self, Entry.self])
+
+    /// Base SwiftData dans l'App Group, lue et écrite par l'app et le widget.
+    /// La synchro iCloud sera branchée à l'étape 8.
+    static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
+        let configuration = inMemory
+            ? ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+            : ModelConfiguration(schema: schema, url: storeURL, cloudKitDatabase: .none)
+        return try ModelContainer(for: schema, configurations: [configuration])
+    }
+
+    static var storeURL: URL {
+        if let group = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppConfig.appGroup) {
+            return group.appending(path: "Rituel.store")
+        }
+        let support = URL.applicationSupportDirectory
+        try? FileManager.default.createDirectory(at: support, withIntermediateDirectories: true)
+        return support.appending(path: "Rituel.store")
+    }
+}
+
+/// Écrit les saisies : une entrée par habitude et par jour, supprimée quand la valeur retombe à 0.
+@MainActor
+struct EntryWriter {
+    let context: ModelContext
+    var calendar: RituelCalendar = .current
+
+    /// Applique l'action et renvoie la nouvelle valeur du jour.
+    @discardableResult
+    func apply(_ action: EntryAction, habitID: UUID, day: Date, now: Date = .now) -> Double {
+        let start = calendar.day(day)
+        guard start <= calendar.day(now) else { return 0 }
+        let existing = entries(habitID: habitID, day: start)
+        let current = existing.max(by: { $0.updatedAt < $1.updatedAt })?.value ?? 0
+        let value = HabitEngine.newValue(for: action, current: current)
+
+        if let keep = existing.first, value > 0 {
+            keep.value = value
+            keep.updatedAt = now
+            existing.dropFirst().forEach(context.delete)
+        } else {
+            existing.forEach(context.delete)
+            if value > 0 { context.insert(Entry(habitID: habitID, day: start, value: value, updatedAt: now)) }
+        }
+        try? context.save()
+        WidgetCenter.shared.reloadAllTimelines()
+        return value
+    }
+
+    func entries(habitID: UUID, day start: Date) -> [Entry] {
+        let end = calendar.adding(days: 1, to: start)
+        let id: UUID? = habitID
+        let descriptor = FetchDescriptor<Entry>(predicate: #Predicate {
+            $0.habitID == id && $0.day >= start && $0.day < end
+        })
+        return (try? context.fetch(descriptor)) ?? []
+    }
+}

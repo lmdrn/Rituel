@@ -18,7 +18,7 @@ struct BrandHeader: View {
                 .foregroundStyle(.ink3)
                 .padding(.horizontal, 9)
                 .padding(.vertical, 4)
-                .background(.surface, in: Capsule())
+                .background { Pebble(shape: Capsule(), lifted: false) }
         }
     }
 }

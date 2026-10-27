@@ -25,3 +25,36 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **`PrivacyInfo.xcprivacy`** : ajouté dès maintenant (UserDefaults pour l'app et l'App Group, aucune donnée collectée). Il sera vérifié à l'étape 8.
 - **`Rituel.xcodeproj` versionné** : il est régénéré par `xcodegen generate`, mais on le garde dans le dépôt pour pouvoir ouvrir le projet directement après un clone. Après toute modification de `project.yml`, relancer `xcodegen generate`.
 - **Sécurité / CVE** : aucune dépendance tierce (exigence du brief), donc aucune bibliothèque externe à surveiller. La surface se limite à Xcode et au SDK iOS, à garder à jour. `ENABLE_USER_SCRIPT_SANDBOXING` est activé, Swift 6 vérifie la concurrence de façon stricte, et le `.gitignore` exclut les builds, les certificats, les profils et les clés App Store Connect. Le Team ID et le bundle id ne sont pas des secrets.
+
+## Étape 2 — Modèle et HabitEngine
+
+- **Moteur pur** : `HabitEngine`, `RecapEngine`, `RituelCalendar`, `QuantityFormat` et `EntryLog` (dans `Shared/Engine/`) ne dépendent ni de SwiftData ni de SwiftUI. Ils travaillent sur `HabitSpec` (copie immuable d'une habitude) et `EntryRecord`, ce qui les rend testables avec un calendrier et un « aujourd'hui » fixés (tests sur Europe/Paris).
+- **Modèle SwiftData** : énumérations stockées en texte (`kindRaw`, `periodRaw`…), rappel stocké en minutes depuis minuit (`reminderMinutes`). `Entry.habitID` est optionnel, comme CloudKit l'exige, et il n'y a pas de relation avec `Habit` : à la suppression d'une habitude, ses entrées seront effacées à la main (étape 4).
+- **`Entry.updatedAt`** (ajouté) : sans contrainte `unique`, la synchro iCloud peut créer deux entrées pour le même jour. `EntryLog` garde alors la plus récente, et `EntryWriter` supprime les doublons à la prochaine saisie.
+- **Habitudes par défaut** : identifiants fixes (`6A1C0000-…-00000000000N`), pour pouvoir repérer les doublons si deux appareils les créent avant la synchro (traité à l'étape 8). Elles ne sont créées qu'une fois (drapeau dans l'App Group).
+- **Base** : `Rituel.store` dans l'App Group. CloudKit est désactivé (`cloudKitDatabase: .none`) jusqu'à l'étape 8.
+- **« Rien noté, bravo »** (limite à 0, rien noté) : en vert plutôt qu'en ambre comme sur le web, parce que c'est une réussite.
+- **Conseil stable** : somme des caractères de l'identifiant + numéro de semaine ISO. `hashValue` n'est pas utilisable : il change à chaque lancement.
+- **Récap mensuel** : on suit la version web, c'est-à-dire le mois du dernier jour évalué (aujourd'hui si la semaine est en cours, sinon le dimanche).
+- **Moyenne d'une quantité quotidienne** : divisée par tous les jours écoulés de la semaine, aujourd'hui compris (comme sur le web).
+- **Grands nombres** : pas de séparateur de milliers (« 10000 pas »), comme sur le web.
+
+## Étape 3 — Aujourd'hui
+
+- **Données chargées** : seules les entrées de la semaine et du mois du jour sélectionné sont lues (`@Query` filtré).
+- **Changement de jour** : si l'app reste ouverte après minuit, l'écran passe au nouveau jour (notification `NSCalendarDayChanged` et retour au premier plan).
+- **Barre d'onglets** : pilule maison avec des symboles SF (`checkmark.circle`, `chart.bar`, `list.bullet`) proches des icônes du web. Les onglets Récap et Habitudes affichent un écran d'attente jusqu'aux étapes 4 et 5.
+- **Prénom** : lu dans l'App Group (`firstName`), vide par défaut, donc « Bonjour » seul tant qu'il n'est pas réglé (étape 4).
+- **Dynamic Type** : le rond de saisie grandit avec le texte, jusqu'à 1,35 fois sa taille.
+- **Retour haptique** : `sensoryFeedback(.impact(weight: .light))` à chaque saisie, `.selection` en changeant de jour.
+
+## Thème « soft clay » (demandé le 27 octobre 2026, remplace la section 5 du brief)
+
+- **Pourquoi** : Léa a choisi une référence pastel en relief doux (claymorphism). Ses choix : les pastels de la référence plutôt que pervenche et soleil, et **le logo et l'icône gardés tels quels** (carré pervenche, marguerite).
+- **Couleurs** : fond sable rosé #F4EEE9, surfaces crème #FFFBF7, accent pêche #E9A68C avec texte prune #4A2A22 par-dessus, terracotta #A8533B pour le texte accentué, bleu brumeux et rose poudré pour les formes. Il existe une variante sombre prune pour chaque couleur. Statuts : sauge, miel et brique, assez foncés pour passer le contraste AA sur leur fond doux. Toutes les paires texte/fond ont été vérifiées : 4,5:1 au moins, sauf `ink3` sur `surface2` (4,3:1, seulement dans les petites cases de la mini-frise).
+- **Nouveaux tokens** : `SurfaceHigh` (haut des surfaces en relief), `AccentText`, `Mist`, `Blush`.
+- **Palette des habitudes** : mêmes 16 clés et mêmes noms, en versions pastel pour s'accorder au thème. Les clés stockées ne changent pas, donc rien à migrer.
+- **Relief** : les cartes et la barre d'onglets ont un dégradé vertical, un liseré lumineux en haut et une ombre chaude diffuse (`ClaySurface`). Les boutons sont des galets bombés avec un reflet en haut à gauche (`Pebble`).
+- **Vagues** : rose poudré et bleu brumeux, fixes en haut de l'écran. La frise de la semaine ne prend un fond opaque qu'une fois collée en haut, pour ne pas couper les vagues au repos.
+- **Forme qui respire** : pêche vers bleu brumeux, au lieu de soleil vers lilas.
+- **Données d'exemple** : l'argument de lancement `-RituelSampleData` (debug seulement) ouvre l'app sur les données des previews, en mémoire. Utile pour les captures.

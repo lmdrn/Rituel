@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Forme organique jaune soleil et lilas qui « respire » derrière le titre (cycle de 9 s).
+/// Forme organique pêche et bleu brumeux qui « respire » derrière le titre (cycle de 9 s).
 struct BreathingBlob: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var inhale = false
@@ -9,7 +9,7 @@ struct BreathingBlob: View {
         BlobShape()
             .fill(
                 RadialGradient(
-                    colors: [Color.sun.opacity(0.7), Color(hex: 0x9B7FEA, opacity: 0.55)],
+                    colors: [Color.accent.opacity(0.8), Color.mist.opacity(0.65)],
                     center: UnitPoint(x: 0.35, y: 0.35),
                     startRadius: 0,
                     endRadius: 92 * 0.72

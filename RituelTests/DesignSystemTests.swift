@@ -10,7 +10,7 @@ struct DesignSystemTests {
 
     @Test func paletteKeysMatchTheWebVersion() {
         #expect(HabitColor(key: "lilas") == .lilas)
-        #expect(HabitColor(key: "ciel").hex == 0x6CC8FF)
+        #expect(HabitColor(key: "ciel").hex == 0x9CCBE6)
         #expect(HabitColor(key: "mandarine").name == "Mandarine")
     }
 
@@ -21,8 +21,8 @@ struct DesignSystemTests {
     }
 
     @Test func colorTokensExistInTheAssetCatalog() {
-        let names = ["Canvas", "Surface", "Surface2", "Line", "Ink", "Ink2", "Ink3", "Accent", "AccentSoft",
-                     "AccentInk", "Sun", "Ok", "OkSoft", "Edge", "EdgeSoft", "Over", "OverSoft"]
+        let names = ["Canvas", "Surface", "SurfaceHigh", "Surface2", "Line", "Ink", "Ink2", "Ink3", "Accent", "AccentSoft",
+                     "AccentInk", "AccentText", "Sun", "Mist", "Blush", "Ok", "OkSoft", "Edge", "EdgeSoft", "Over", "OverSoft"]
         for name in names {
             #expect(UIColor(named: name, in: .main, compatibleWith: nil) != nil, "Couleur manquante : \(name)")
         }
