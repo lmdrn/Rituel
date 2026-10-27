@@ -1,0 +1,17 @@
+// Rituel — configuration à personnaliser.
+// Remplace ces valeurs par les tiennes, puis relance `xcodegen generate`.
+
+// Identifiant de l'app (le widget et les tests en dérivent).
+APP_BUNDLE_ID = com.leamedrano.rituel
+
+// Team ID Apple Developer (10 caractères, visible sur developer.apple.com > Membership).
+DEVELOPMENT_TEAM =
+
+// App Group partagé entre l'app et le widget.
+APP_GROUP = group.$(APP_BUNDLE_ID).shared
+
+// Conteneur iCloud (CloudKit) pour la synchro SwiftData.
+ICLOUD_CONTAINER = iCloud.$(APP_BUNDLE_ID)
+
+MARKETING_VERSION = 1.0
+CURRENT_PROJECT_VERSION = 1

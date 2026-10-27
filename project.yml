@@ -1,0 +1,142 @@
+name: Rituel
+
+options:
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: fr
+  createIntermediateGroups: true
+  xcodeVersion: "16.0"
+  groupSortPosition: top
+
+configFiles:
+  Debug: Config.xcconfig
+  Release: Config.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    # Les tokens de couleur sont exposés à la main dans Theme.swift.
+    ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  Rituel:
+    type: application
+    platform: iOS
+    sources:
+      - path: Rituel
+      - path: Shared
+    dependencies:
+      - target: RituelWidgets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
+        PRODUCT_NAME: Rituel
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: Accent
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: NO
+    entitlements:
+      path: Rituel/Rituel.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP)
+        com.apple.developer.icloud-container-identifiers:
+          - $(ICLOUD_CONTAINER)
+        com.apple.developer.icloud-services:
+          - CloudKit
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+        aps-environment: development
+    info:
+      path: Rituel/Info.plist
+      properties:
+        CFBundleDisplayName: Rituel
+        CFBundleDevelopmentRegion: fr
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSRequiresIPhoneOS: true
+        UILaunchScreen:
+          UIColorName: Canvas
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIBackgroundModes:
+          - remote-notification
+        UIAppFonts: &fonts
+          - FrauncesSoft-Display.ttf
+          - FrauncesSoft-Text.ttf
+          - FrauncesSoft-Light.ttf
+          - Figtree-Regular.ttf
+          - Figtree-SemiBold.ttf
+          - Figtree-Bold.ttf
+        NSHealthShareUsageDescription: Rituel lit ton temps de sommeil pour remplir ton habitude Sommeil automatiquement.
+        RituelAppGroup: $(APP_GROUP)
+        RituelCloudKitContainer: $(ICLOUD_CONTAINER)
+
+  RituelWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: RituelWidgets
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).widgets
+        PRODUCT_NAME: RituelWidgets
+        SKIP_INSTALL: YES
+        ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: Surface
+    entitlements:
+      path: RituelWidgets/RituelWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP)
+    info:
+      path: RituelWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Rituel
+        CFBundleDevelopmentRegion: fr
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        UIAppFonts: *fonts
+        RituelAppGroup: $(APP_GROUP)
+
+  RituelTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: RituelTests
+    dependencies:
+      - target: Rituel
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  Rituel:
+    build:
+      targets:
+        Rituel: all
+        RituelWidgets: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - RituelTests
+    archive:
+      config: Release

@@ -1,0 +1,25 @@
+# Compilation
+build/
+DerivedData/
+*.xcresult
+
+# Réglages Xcode personnels
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Signature et distribution (ne jamais publier)
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+AuthKey_*.p8
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Fichiers locaux de configuration (si tu crées une surcharge privée)
+Config.local.xcconfig
+
+# macOS
+.DS_Store

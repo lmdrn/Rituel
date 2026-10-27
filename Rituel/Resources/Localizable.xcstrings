@@ -1,0 +1,21 @@
+{
+  "sourceLanguage" : "fr",
+  "strings" : {
+    "Bientôt tes habitudes ici." : {
+
+    },
+    "Bonjour" : {
+
+    },
+    "Semaine %lld" : {
+
+    },
+    "Tes habitudes du jour." : {
+
+    },
+    "Tout est en équilibre. Continue à ton rythme." : {
+
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,0 +1,730 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06C1F13570D6681EAA5F9FB4 /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E74D017FE9E53AD6D437A795 /* Figtree-Regular.ttf */; };
+		0E810CC543C05BB9AE5562AB /* FrauncesSoft-Text.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9589D0F9674D2B9A0E4A9835 /* FrauncesSoft-Text.ttf */; };
+		103F7B5A1DB63EDCC4FDC0BE /* Figtree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */; };
+		17101CA5BF81335E6862FD08 /* HabitPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884CEC52D10CB7531077BB7 /* HabitPalette.swift */; };
+		1887DEED2A8EC721F73F0C97 /* OFL-Figtree.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */; };
+		1CC737FDB10FD199C6543742 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E0532F7A3F6C6680F3AF1E /* RootView.swift */; };
+		209FAF2CB28F152EF9CC2086 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */; };
+		217B4D44DEE479AC2A5D7B74 /* Figtree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */; };
+		2A040567A2F9656D43942FEC /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E74D017FE9E53AD6D437A795 /* Figtree-Regular.ttf */; };
+		39272CC134A84D59F663C914 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1F1B880D3993C43F002DCFA /* Localizable.xcstrings */; };
+		405BA2A04E8A63F6706A99F5 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BFEADBC2568A7D6433E46 /* AppConfig.swift */; };
+		45CC53C9FE907461F5F8B980 /* FrauncesSoft-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C39D31D9D7CEB0412C7FF0D1 /* FrauncesSoft-Light.ttf */; };
+		4AB3EEB60E4277CB83578A20 /* Figtree-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 431ADDEEABE28A6B9F2A9C90 /* Figtree-SemiBold.ttf */; };
+		58839CD40662EFCC98582D7F /* RituelApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF316C2C8511C88D4C5D4A98 /* RituelApp.swift */; };
+		59F343B8F6F5D3168D9101FC /* Figtree-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 431ADDEEABE28A6B9F2A9C90 /* Figtree-SemiBold.ttf */; };
+		6CC31BF5E975672B658C669D /* RituelWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 57ABBCD1C72776D53990554E /* RituelWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6EC88D4D9E4BC8FB02E812A4 /* RituelWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88398E487E9C01A0064EB18E /* RituelWidgetsBundle.swift */; };
+		6F5EC2522B12D287F44CE36E /* BreathingBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00981FB7C98F832C31611F02 /* BreathingBlob.swift */; };
+		7D43A4CB0CF68541A85706FE /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9291609DC09C4E60AE33D9B6 /* DesignSystemTests.swift */; };
+		80C6A472AB468D6C2859B2AC /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB497A2382840833B6574821 /* Typography.swift */; };
+		844AF69FBD053545F9763717 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB497A2382840833B6574821 /* Typography.swift */; };
+		851ED267B916D22EECE09ADF /* FrauncesSoft-Text.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9589D0F9674D2B9A0E4A9835 /* FrauncesSoft-Text.ttf */; };
+		85D4CE245B54F1DC60FC5D92 /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A58D430EFC9B537CB78E1E1 /* BrandMark.swift */; };
+		8E08E89694BDF26F2CEB8073 /* OFL-Figtree.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */; };
+		96ADBD61527D3E5AC2C49BE5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D0236D3FB3E55606E9CDB7 /* Theme.swift */; };
+		97384C1B3BC9053FAD010EED /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */; };
+		98FC40F2F03AD3C57A89438A /* FrauncesSoft-Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD97F897832CDF809C58A98 /* FrauncesSoft-Display.ttf */; };
+		A3C51DAEAF6E08175055A523 /* FrauncesSoft-Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD97F897832CDF809C58A98 /* FrauncesSoft-Display.ttf */; };
+		B222D9265A875B697E14FE0C /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BFEADBC2568A7D6433E46 /* AppConfig.swift */; };
+		B29085ACD998A1D6CFE3C0DF /* HabitPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884CEC52D10CB7531077BB7 /* HabitPalette.swift */; };
+		BDD26A3513EA4FEA313B7A6C /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A58D430EFC9B537CB78E1E1 /* BrandMark.swift */; };
+		C93885DE4830EFAFDA2B7376 /* BrandHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4567151B3D2BA11D140DA5F /* BrandHeader.swift */; };
+		D093B05FEA433B69F938EBC0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */; };
+		DC6C57EAD4F1798497ED6531 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D0236D3FB3E55606E9CDB7 /* Theme.swift */; };
+		E475004AAD4E8D67F0596A5D /* OFL-Fraunces.txt in Resources */ = {isa = PBXBuildFile; fileRef = E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */; };
+		F96AB24388962B8972BA6359 /* OFL-Fraunces.txt in Resources */ = {isa = PBXBuildFile; fileRef = E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */; };
+		F9ACA05251EFE442B582F777 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4910B78A2B71784BBD33D2F4 /* Assets.xcassets */; };
+		FA0919964F5075B33F27873F /* FrauncesSoft-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C39D31D9D7CEB0412C7FF0D1 /* FrauncesSoft-Light.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DF13657219B72E0F90008D02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD83F711D60303D068878FA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 58D407FA923940A14AB07C6A;
+			remoteInfo = Rituel;
+		};
+		EC83193D08E2AE1A1D54607F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD83F711D60303D068878FA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9563E12E86B32ACA464957ED;
+			remoteInfo = RituelWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		84B47F09971CB237129DB804 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6CC31BF5E975672B658C669D /* RituelWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		00981FB7C98F832C31611F02 /* BreathingBlob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingBlob.swift; sourceTree = "<group>"; };
+		0884CEC52D10CB7531077BB7 /* HabitPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitPalette.swift; sourceTree = "<group>"; };
+		0F7B693F94B5F9127C8906A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Figtree.txt"; sourceTree = "<group>"; };
+		431ADDEEABE28A6B9F2A9C90 /* Figtree-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Figtree-SemiBold.ttf"; sourceTree = "<group>"; };
+		4910B78A2B71784BBD33D2F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignSystem.xcassets; sourceTree = "<group>"; };
+		4D76CF69820DC7F53C4E100E /* Rituel.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Rituel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		57ABBCD1C72776D53990554E /* RituelWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RituelWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A58D430EFC9B537CB78E1E1 /* BrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandMark.swift; sourceTree = "<group>"; };
+		5AD97F897832CDF809C58A98 /* FrauncesSoft-Display.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesSoft-Display.ttf"; sourceTree = "<group>"; };
+		794BFEADBC2568A7D6433E46 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		88398E487E9C01A0064EB18E /* RituelWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RituelWidgetsBundle.swift; sourceTree = "<group>"; };
+		9291609DC09C4E60AE33D9B6 /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemTests.swift; sourceTree = "<group>"; };
+		9589D0F9674D2B9A0E4A9835 /* FrauncesSoft-Text.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesSoft-Text.ttf"; sourceTree = "<group>"; };
+		97A5C27DD7ED7E8B68867011 /* RituelWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RituelWidgets.entitlements; sourceTree = "<group>"; };
+		9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Figtree-Bold.ttf"; sourceTree = "<group>"; };
+		B3E0532F7A3F6C6680F3AF1E /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		BF316C2C8511C88D4C5D4A98 /* RituelApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RituelApp.swift; sourceTree = "<group>"; };
+		C39D31D9D7CEB0412C7FF0D1 /* FrauncesSoft-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesSoft-Light.ttf"; sourceTree = "<group>"; };
+		CB497A2382840833B6574821 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		DDAA6F458F22D0E1F9AD67EF /* Rituel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rituel.entitlements; sourceTree = "<group>"; };
+		E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Fraunces.txt"; sourceTree = "<group>"; };
+		E74D017FE9E53AD6D437A795 /* Figtree-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Figtree-Regular.ttf"; sourceTree = "<group>"; };
+		E9D0236D3FB3E55606E9CDB7 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		EE068B18F6F8981F39B7CC75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F1F1B880D3993C43F002DCFA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		F4567151B3D2BA11D140DA5F /* BrandHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandHeader.swift; sourceTree = "<group>"; };
+		F8B1DCD73FBB6B6FC8A7992F /* RituelTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RituelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"TEMP_02E52DF8-F2C8-42A0-9C57-8F47168FB372" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1848842AFFFFB1535E54C227 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */,
+				E74D017FE9E53AD6D437A795 /* Figtree-Regular.ttf */,
+				431ADDEEABE28A6B9F2A9C90 /* Figtree-SemiBold.ttf */,
+				5AD97F897832CDF809C58A98 /* FrauncesSoft-Display.ttf */,
+				C39D31D9D7CEB0412C7FF0D1 /* FrauncesSoft-Light.ttf */,
+				9589D0F9674D2B9A0E4A9835 /* FrauncesSoft-Text.ttf */,
+				2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */,
+				E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		19C21D913DA42F6346C7CF3B /* RituelTests */ = {
+			isa = PBXGroup;
+			children = (
+				9291609DC09C4E60AE33D9B6 /* DesignSystemTests.swift */,
+			);
+			path = RituelTests;
+			sourceTree = "<group>";
+		};
+		1EBE5083D10556612551DB51 /* Rituel */ = {
+			isa = PBXGroup;
+			children = (
+				B7E842643E4E083B6465784B /* App */,
+				5F76A4D210D8C9622D6F6B35 /* Resources */,
+				6AF3C87675A1B9B1EB1F09EF /* Views */,
+				0F7B693F94B5F9127C8906A8 /* Info.plist */,
+				DDAA6F458F22D0E1F9AD67EF /* Rituel.entitlements */,
+			);
+			path = Rituel;
+			sourceTree = "<group>";
+		};
+		5F76A4D210D8C9622D6F6B35 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4910B78A2B71784BBD33D2F4 /* Assets.xcassets */,
+				F1F1B880D3993C43F002DCFA /* Localizable.xcstrings */,
+				F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6AF3C87675A1B9B1EB1F09EF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7CE13A29B8A5F2C9C9B11818 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7B7B98467AF44FDC853245FC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D40C88AD0C3C6175EBFDAE15 /* DesignSystem */,
+				1848842AFFFFB1535E54C227 /* Fonts */,
+				794BFEADBC2568A7D6433E46 /* AppConfig.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		7CE13A29B8A5F2C9C9B11818 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F4567151B3D2BA11D140DA5F /* BrandHeader.swift */,
+				00981FB7C98F832C31611F02 /* BreathingBlob.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		92C1905644D833406998BA42 = {
+			isa = PBXGroup;
+			children = (
+				1EBE5083D10556612551DB51 /* Rituel */,
+				19C21D913DA42F6346C7CF3B /* RituelTests */,
+				EE961A3B7C7063AADC159DB8 /* RituelWidgets */,
+				7B7B98467AF44FDC853245FC /* Shared */,
+				D5DB4D07423237D7E2C6A984 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B7E842643E4E083B6465784B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BF316C2C8511C88D4C5D4A98 /* RituelApp.swift */,
+				B3E0532F7A3F6C6680F3AF1E /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		D40C88AD0C3C6175EBFDAE15 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				5A58D430EFC9B537CB78E1E1 /* BrandMark.swift */,
+				4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */,
+				0884CEC52D10CB7531077BB7 /* HabitPalette.swift */,
+				E9D0236D3FB3E55606E9CDB7 /* Theme.swift */,
+				CB497A2382840833B6574821 /* Typography.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		D5DB4D07423237D7E2C6A984 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D76CF69820DC7F53C4E100E /* Rituel.app */,
+				F8B1DCD73FBB6B6FC8A7992F /* RituelTests.xctest */,
+				57ABBCD1C72776D53990554E /* RituelWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EE961A3B7C7063AADC159DB8 /* RituelWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				EE068B18F6F8981F39B7CC75 /* Info.plist */,
+				97A5C27DD7ED7E8B68867011 /* RituelWidgets.entitlements */,
+				88398E487E9C01A0064EB18E /* RituelWidgetsBundle.swift */,
+			);
+			path = RituelWidgets;
+			sourceTree = "<group>";
+		};
+		"TEMP_0B379921-4960-49D7-975D-FD2B37CB0075" /* rituel */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_02E52DF8-F2C8-42A0-9C57-8F47168FB372" /* Config.xcconfig */,
+			);
+			path = rituel;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		58D407FA923940A14AB07C6A /* Rituel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2CC0D931AD57A72C7769786B /* Build configuration list for PBXNativeTarget "Rituel" */;
+			buildPhases = (
+				E15891945372CBECE71FE604 /* Sources */,
+				9CD8FC53634C5A1245A44340 /* Resources */,
+				84B47F09971CB237129DB804 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				45C971650DA03739F7EEDE99 /* PBXTargetDependency */,
+			);
+			name = Rituel;
+			packageProductDependencies = (
+			);
+			productName = Rituel;
+			productReference = 4D76CF69820DC7F53C4E100E /* Rituel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9563E12E86B32ACA464957ED /* RituelWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D02E11906165D31B7A6F0214 /* Build configuration list for PBXNativeTarget "RituelWidgets" */;
+			buildPhases = (
+				F80BF00C30140CB929CF5E20 /* Sources */,
+				3BC80A93D9189DDAC6794AC9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RituelWidgets;
+			packageProductDependencies = (
+			);
+			productName = RituelWidgets;
+			productReference = 57ABBCD1C72776D53990554E /* RituelWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		AFE073C67A3104F425AA54F8 /* RituelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FCB986DC33B1A0D9406165E /* Build configuration list for PBXNativeTarget "RituelTests" */;
+			buildPhases = (
+				CC2FFD34822C4EA9901F7091 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF2A9A3EC1AF89B5CA015706 /* PBXTargetDependency */,
+			);
+			name = RituelTests;
+			packageProductDependencies = (
+			);
+			productName = RituelTests;
+			productReference = F8B1DCD73FBB6B6FC8A7992F /* RituelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FD83F711D60303D068878FA9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					58D407FA923940A14AB07C6A = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					9563E12E86B32ACA464957ED = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					AFE073C67A3104F425AA54F8 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F6527E60A0D7EB4393529F23 /* Build configuration list for PBXProject "Rituel" */;
+			developmentRegion = fr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				fr,
+			);
+			mainGroup = 92C1905644D833406998BA42;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D5DB4D07423237D7E2C6A984 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				58D407FA923940A14AB07C6A /* Rituel */,
+				9563E12E86B32ACA464957ED /* RituelWidgets */,
+				AFE073C67A3104F425AA54F8 /* RituelTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3BC80A93D9189DDAC6794AC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97384C1B3BC9053FAD010EED /* DesignSystem.xcassets in Resources */,
+				103F7B5A1DB63EDCC4FDC0BE /* Figtree-Bold.ttf in Resources */,
+				2A040567A2F9656D43942FEC /* Figtree-Regular.ttf in Resources */,
+				59F343B8F6F5D3168D9101FC /* Figtree-SemiBold.ttf in Resources */,
+				A3C51DAEAF6E08175055A523 /* FrauncesSoft-Display.ttf in Resources */,
+				FA0919964F5075B33F27873F /* FrauncesSoft-Light.ttf in Resources */,
+				0E810CC543C05BB9AE5562AB /* FrauncesSoft-Text.ttf in Resources */,
+				1887DEED2A8EC721F73F0C97 /* OFL-Figtree.txt in Resources */,
+				E475004AAD4E8D67F0596A5D /* OFL-Fraunces.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD8FC53634C5A1245A44340 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9ACA05251EFE442B582F777 /* Assets.xcassets in Resources */,
+				209FAF2CB28F152EF9CC2086 /* DesignSystem.xcassets in Resources */,
+				217B4D44DEE479AC2A5D7B74 /* Figtree-Bold.ttf in Resources */,
+				06C1F13570D6681EAA5F9FB4 /* Figtree-Regular.ttf in Resources */,
+				4AB3EEB60E4277CB83578A20 /* Figtree-SemiBold.ttf in Resources */,
+				98FC40F2F03AD3C57A89438A /* FrauncesSoft-Display.ttf in Resources */,
+				45CC53C9FE907461F5F8B980 /* FrauncesSoft-Light.ttf in Resources */,
+				851ED267B916D22EECE09ADF /* FrauncesSoft-Text.ttf in Resources */,
+				39272CC134A84D59F663C914 /* Localizable.xcstrings in Resources */,
+				8E08E89694BDF26F2CEB8073 /* OFL-Figtree.txt in Resources */,
+				F96AB24388962B8972BA6359 /* OFL-Fraunces.txt in Resources */,
+				D093B05FEA433B69F938EBC0 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CC2FFD34822C4EA9901F7091 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D43A4CB0CF68541A85706FE /* DesignSystemTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E15891945372CBECE71FE604 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B222D9265A875B697E14FE0C /* AppConfig.swift in Sources */,
+				C93885DE4830EFAFDA2B7376 /* BrandHeader.swift in Sources */,
+				BDD26A3513EA4FEA313B7A6C /* BrandMark.swift in Sources */,
+				6F5EC2522B12D287F44CE36E /* BreathingBlob.swift in Sources */,
+				B29085ACD998A1D6CFE3C0DF /* HabitPalette.swift in Sources */,
+				58839CD40662EFCC98582D7F /* RituelApp.swift in Sources */,
+				1CC737FDB10FD199C6543742 /* RootView.swift in Sources */,
+				96ADBD61527D3E5AC2C49BE5 /* Theme.swift in Sources */,
+				844AF69FBD053545F9763717 /* Typography.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F80BF00C30140CB929CF5E20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				405BA2A04E8A63F6706A99F5 /* AppConfig.swift in Sources */,
+				85D4CE245B54F1DC60FC5D92 /* BrandMark.swift in Sources */,
+				17101CA5BF81335E6862FD08 /* HabitPalette.swift in Sources */,
+				6EC88D4D9E4BC8FB02E812A4 /* RituelWidgetsBundle.swift in Sources */,
+				DC6C57EAD4F1798497ED6531 /* Theme.swift in Sources */,
+				80C6A472AB468D6C2859B2AC /* Typography.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		45C971650DA03739F7EEDE99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9563E12E86B32ACA464957ED /* RituelWidgets */;
+			targetProxy = EC83193D08E2AE1A1D54607F /* PBXContainerItemProxy */;
+		};
+		BF2A9A3EC1AF89B5CA015706 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 58D407FA923940A14AB07C6A /* Rituel */;
+			targetProxy = DF13657219B72E0F90008D02 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		22DA1A4397813B9A122E40C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rituel.app/Rituel";
+			};
+			name = Debug;
+		};
+		36F0C037FCAA4E34EDECBD25 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_02E52DF8-F2C8-42A0-9C57-8F47168FB372" /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5C45DABE4707533A987EA2CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Accent;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Rituel/Rituel.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Rituel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
+				PRODUCT_NAME = Rituel;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		78C15873DED674446918A6B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = Surface;
+				CODE_SIGN_ENTITLEMENTS = RituelWidgets/RituelWidgets.entitlements;
+				INFOPLIST_FILE = RituelWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).widgets";
+				PRODUCT_NAME = RituelWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		79024E8280BF30E707C9F986 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Accent;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Rituel/Rituel.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Rituel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
+				PRODUCT_NAME = Rituel;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EC6D07AA73BDB67E0B69B8FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_02E52DF8-F2C8-42A0-9C57-8F47168FB372" /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F17401E25A8BE645A47DCFD9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rituel.app/Rituel";
+			};
+			name = Release;
+		};
+		F999E21B24FCFECC16685A25 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = Surface;
+				CODE_SIGN_ENTITLEMENTS = RituelWidgets/RituelWidgets.entitlements;
+				INFOPLIST_FILE = RituelWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).widgets";
+				PRODUCT_NAME = RituelWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2CC0D931AD57A72C7769786B /* Build configuration list for PBXNativeTarget "Rituel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79024E8280BF30E707C9F986 /* Debug */,
+				5C45DABE4707533A987EA2CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2FCB986DC33B1A0D9406165E /* Build configuration list for PBXNativeTarget "RituelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22DA1A4397813B9A122E40C1 /* Debug */,
+				F17401E25A8BE645A47DCFD9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D02E11906165D31B7A6F0214 /* Build configuration list for PBXNativeTarget "RituelWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F999E21B24FCFECC16685A25 /* Debug */,
+				78C15873DED674446918A6B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F6527E60A0D7EB4393529F23 /* Build configuration list for PBXProject "Rituel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36F0C037FCAA4E34EDECBD25 /* Debug */,
+				EC6D07AA73BDB67E0B69B8FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FD83F711D60303D068878FA9 /* Project object */;
+}
