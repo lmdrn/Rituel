@@ -4,12 +4,14 @@ import SwiftUI
 
 /// Onglet « Aujourd'hui » : salutation, frise de la semaine, cartes groupées par période.
 struct TodayView: View {
+    var onCreateHabit: () -> Void = {}
+
     @Environment(\.scenePhase) private var scenePhase
     @State private var today = RituelCalendar.current.day(.now)
     @State private var selected = RituelCalendar.current.day(.now)
 
     var body: some View {
-        TodayContent(selected: $selected, today: today)
+        TodayContent(selected: $selected, today: today, onCreateHabit: onCreateHabit)
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { refreshDay() }
             }
@@ -30,6 +32,7 @@ struct TodayView: View {
 private struct TodayContent: View {
     @Binding var selected: Date
     let today: Date
+    let onCreateHabit: () -> Void
 
     @Environment(\.modelContext) private var context
     @AppStorage(SharedDefaults.firstNameKey, store: SharedDefaults.store) private var firstName = ""
@@ -38,9 +41,10 @@ private struct TodayContent: View {
 
     private let calendar = RituelCalendar.current
 
-    init(selected: Binding<Date>, today: Date) {
+    init(selected: Binding<Date>, today: Date, onCreateHabit: @escaping () -> Void) {
         _selected = selected
         self.today = today
+        self.onCreateHabit = onCreateHabit
         // Seules les entrées utiles à l'écran : la semaine et le mois du jour sélectionné.
         let cal = RituelCalendar.current
         let week = cal.range(.week, containing: selected.wrappedValue)
@@ -73,14 +77,18 @@ private struct TodayContent: View {
                         }
                     }
                     if specs.isEmpty {
-                        Text("Aucune habitude pour l'instant.")
-                            .font(.rituelBody)
-                            .foregroundStyle(.ink)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 16)
-                            .background(.accentSoft, in: RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous))
-                            .padding(.horizontal, Metrics.gutter)
+                        VStack(alignment: .leading, spacing: 14) {
+                            Text("Aucune habitude pour l'instant.")
+                                .font(.rituelBody)
+                                .foregroundStyle(.ink)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.vertical, 14)
+                                .padding(.horizontal, 16)
+                                .background(.accentSoft, in: RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous))
+                            Button("Créer une habitude", action: onCreateHabit)
+                                .buttonStyle(PillButtonStyle(kind: .primary))
+                        }
+                        .padding(.horizontal, Metrics.gutter)
                     }
                 } header: {
                     WeekStrip(selected: $selected, today: today, log: log)

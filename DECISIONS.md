@@ -58,3 +58,15 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **Vagues** : rose poudré et bleu brumeux, fixes en haut de l'écran. La frise de la semaine ne prend un fond opaque qu'une fois collée en haut, pour ne pas couper les vagues au repos.
 - **Forme qui respire** : pêche vers bleu brumeux, au lieu de soleil vers lilas.
 - **Données d'exemple** : l'argument de lancement `-RituelSampleData` (debug seulement) ouvre l'app sur les données des previews, en mémoire. Utile pour les captures.
+
+## Étape 4 — Habitudes et feuille d'édition
+
+- **Logique du formulaire** dans `HabitDraft` (testé) : les mêmes réflexes que le web. Passer en quantité met « h » par défaut, et avec une petite cible en heures, propose un objectif de 8 h. Les choix rapides suivent l'unité tant qu'on ne les a pas modifiés. L'unité « ml » passe en « J'additionne ». Une cible en nombre de fois va de 1 (objectif) ou 0 (limite) à 99. Repasser une quantité en nombre de fois efface l'unité et les choix rapides.
+- **Couleur d'une nouvelle habitude** : la première couleur de la palette pas encore utilisée (le web prenait toujours citron).
+- **Unité** : 8 caractères au plus.
+- **Liste** : une carte par habitude plutôt qu'une seule carte pour toute la liste. Le glisser-déposer de SwiftUI soulève une ligne à la fois, et une carte par ligne rend mieux. On réordonne d'un appui long. VoiceOver a les actions « Monter » et « Descendre ».
+- **Suppression** : confirmation dans la feuille, comme sur le web. Les saisies de l'habitude sont effacées avec elle et l'ordre est resserré.
+- **Rappel** : 20 h par défaut quand on l'active. La notification et la demande de permission arrivent à l'étape 7.
+- **Réglages** : le prénom (40 caractères au plus) et les interrupteurs « Sommeil depuis Santé » et « Rappels » sont enregistrés dans l'App Group. Les deux interrupteurs n'ont pas encore d'effet : ils seront branchés à l'étape 7. L'état de synchro affiche « Enregistré sur cet appareil » jusqu'à l'étape 8.
+- **Écran Aujourd'hui vide** : le bouton « Créer une habitude » ouvre l'onglet Habitudes avec la feuille déjà ouverte.
+- **Options de lancement en debug** : `-RituelTab habits|recap` et `-RituelNewHabit YES`, pour les captures.

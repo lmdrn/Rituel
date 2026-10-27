@@ -16,7 +16,10 @@
 		1CC737FDB10FD199C6543742 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E0532F7A3F6C6680F3AF1E /* RootView.swift */; };
 		209FAF2CB28F152EF9CC2086 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */; };
 		217B4D44DEE479AC2A5D7B74 /* Figtree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */; };
+		265C402AC9C5D7BCBF9D602D /* FormControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E42F766E84A6B9C3E49639 /* FormControls.swift */; };
+		26BEBA3CFE87DA1DC3E0E1EF /* HabitEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A4589CBC642B6E6A9AF87 /* HabitEditorSheet.swift */; };
 		2A040567A2F9656D43942FEC /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E74D017FE9E53AD6D437A795 /* Figtree-Regular.ttf */; };
+		2B3CDE769CA33EDB468CCC4E /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE7E2470DFFFE58D76C7594 /* HabitsView.swift */; };
 		32733B352EEC6F42DA371E96 /* FloatingTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A20F7623A927ADCCC667ED /* FloatingTabBar.swift */; };
 		39272CC134A84D59F663C914 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1F1B880D3993C43F002DCFA /* Localizable.xcstrings */; };
 		405BA2A04E8A63F6706A99F5 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BFEADBC2568A7D6433E46 /* AppConfig.swift */; };
@@ -53,13 +56,17 @@
 		9E8004169367CAA79E66D0B6 /* HabitEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52373E9322AA14DA4D4A013C /* HabitEngineTests.swift */; };
 		A3C51DAEAF6E08175055A523 /* FrauncesSoft-Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD97F897832CDF809C58A98 /* FrauncesSoft-Display.ttf */; };
 		AAA16C99C9FA651CABF9AA8E /* WeeklyRecap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9027EEBD175765C4E47A8B8B /* WeeklyRecap.swift */; };
+		AF6944684E31E320D67F8C37 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F566D604F6695F1338156 /* SettingsSection.swift */; };
 		B222D9265A875B697E14FE0C /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BFEADBC2568A7D6433E46 /* AppConfig.swift */; };
 		B29085ACD998A1D6CFE3C0DF /* HabitPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884CEC52D10CB7531077BB7 /* HabitPalette.swift */; };
+		B4F7E7395648538F44B88138 /* HabitDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA50742E1ACB5FE3887EE591 /* HabitDraft.swift */; };
 		BD209182FBD4634B1BA18CF0 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC50E60B635934F369CBCACA /* Habit.swift */; };
 		BDD26A3513EA4FEA313B7A6C /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A58D430EFC9B537CB78E1E1 /* BrandMark.swift */; };
 		BE0ADE7920F90CBFD80DF99D /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2872F3A8690CD1A3CD83F2E9 /* TestSupport.swift */; };
 		C099C99EBD1AC0413E4B844A /* RituelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51CCFAD848095EEB775D089 /* RituelStore.swift */; };
 		C4432E2F78D168C3ECF3AD13 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8733B04A7E1649C8569154 /* PreviewData.swift */; };
+		C5693FE1D3874B94B86525BA /* HabitDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA50742E1ACB5FE3887EE591 /* HabitDraft.swift */; };
+		C859DDC1B2F451761FC7CEA2 /* HabitDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AFED06F1663711683F9B89 /* HabitDraftTests.swift */; };
 		C93885DE4830EFAFDA2B7376 /* BrandHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4567151B3D2BA11D140DA5F /* BrandHeader.swift */; };
 		D02A068BC9E21B34556F6423 /* SoftWaves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7E9D919E160C0330F089DB /* SoftWaves.swift */; };
 		D093B05FEA433B69F938EBC0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */; };
@@ -112,7 +119,9 @@
 /* Begin PBXFileReference section */
 		00981FB7C98F832C31611F02 /* BreathingBlob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingBlob.swift; sourceTree = "<group>"; };
 		0884CEC52D10CB7531077BB7 /* HabitPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitPalette.swift; sourceTree = "<group>"; };
+		08E42F766E84A6B9C3E49639 /* FormControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormControls.swift; sourceTree = "<group>"; };
 		0F7B693F94B5F9127C8906A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0FE7E2470DFFFE58D76C7594 /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
 		2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Figtree.txt"; sourceTree = "<group>"; };
 		2872F3A8690CD1A3CD83F2E9 /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
 		336A4BD5D1AF78E665235A2F /* DefaultHabits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHabits.swift; sourceTree = "<group>"; };
@@ -150,7 +159,10 @@
 		BD2AE5C187FBAD5F080C92CD /* EntryLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryLog.swift; sourceTree = "<group>"; };
 		BF316C2C8511C88D4C5D4A98 /* RituelApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RituelApp.swift; sourceTree = "<group>"; };
 		C39D31D9D7CEB0412C7FF0D1 /* FrauncesSoft-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesSoft-Light.ttf"; sourceTree = "<group>"; };
+		CA50742E1ACB5FE3887EE591 /* HabitDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDraft.swift; sourceTree = "<group>"; };
 		CB497A2382840833B6574821 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		D01F566D604F6695F1338156 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
+		D50A4589CBC642B6E6A9AF87 /* HabitEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditorSheet.swift; sourceTree = "<group>"; };
 		DDAA6F458F22D0E1F9AD67EF /* Rituel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rituel.entitlements; sourceTree = "<group>"; };
 		E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Fraunces.txt"; sourceTree = "<group>"; };
 		E51CCFAD848095EEB775D089 /* RituelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RituelStore.swift; sourceTree = "<group>"; };
@@ -160,8 +172,9 @@
 		F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F1F1B880D3993C43F002DCFA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F4567151B3D2BA11D140DA5F /* BrandHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandHeader.swift; sourceTree = "<group>"; };
+		F5AFED06F1663711683F9B89 /* HabitDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDraftTests.swift; sourceTree = "<group>"; };
 		F8B1DCD73FBB6B6FC8A7992F /* RituelTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RituelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		"TEMP_43120DDC-AE38-4DA6-9653-D396D72517FE" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		"TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -196,6 +209,7 @@
 			children = (
 				40778C26BF6BB65CE2AD0370 /* CalendarTests.swift */,
 				9291609DC09C4E60AE33D9B6 /* DesignSystemTests.swift */,
+				F5AFED06F1663711683F9B89 /* HabitDraftTests.swift */,
 				52373E9322AA14DA4D4A013C /* HabitEngineTests.swift */,
 				5A0284B5DC691C5AC094900E /* RecapTests.swift */,
 				2872F3A8690CD1A3CD83F2E9 /* TestSupport.swift */,
@@ -238,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				7CE13A29B8A5F2C9C9B11818 /* Components */,
+				A0B54D95C93D887436F167AD /* Habits */,
 				13D334FC249BB00D1F8EFA63 /* Today */,
 			);
 			path = Views;
@@ -262,6 +277,7 @@
 				F4567151B3D2BA11D140DA5F /* BrandHeader.swift */,
 				00981FB7C98F832C31611F02 /* BreathingBlob.swift */,
 				99A20F7623A927ADCCC667ED /* FloatingTabBar.swift */,
+				08E42F766E84A6B9C3E49639 /* FormControls.swift */,
 				7E7E9D919E160C0330F089DB /* SoftWaves.swift */,
 			);
 			path = Components;
@@ -276,6 +292,16 @@
 				7B7B98467AF44FDC853245FC /* Shared */,
 				D5DB4D07423237D7E2C6A984 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A0B54D95C93D887436F167AD /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+				D50A4589CBC642B6E6A9AF87 /* HabitEditorSheet.swift */,
+				0FE7E2470DFFFE58D76C7594 /* HabitsView.swift */,
+				D01F566D604F6695F1338156 /* SettingsSection.swift */,
+			);
+			path = Habits;
 			sourceTree = "<group>";
 		};
 		B65D6AAFE4AFF8ABC1862012 /* Model */ = {
@@ -324,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				BD2AE5C187FBAD5F080C92CD /* EntryLog.swift */,
+				CA50742E1ACB5FE3887EE591 /* HabitDraft.swift */,
 				4243310EDED30B80A45F515F /* HabitEngine.swift */,
 				41FF1F26956618B91E2EE956 /* QuantityFormat.swift */,
 				A3323D1D5FFC6A11FCC73CD8 /* RituelCalendar.swift */,
@@ -350,10 +377,10 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
-		"TEMP_04B65CEC-0EAB-4C53-AD11-CCFF81E2B1C0" /* rituel */ = {
+		"TEMP_CC7F2DEB-8C33-4D58-A14F-6BE928B175A1" /* rituel */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_43120DDC-AE38-4DA6-9653-D396D72517FE" /* Config.xcconfig */,
+				"TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */,
 			);
 			path = rituel;
 			sourceTree = "<group>";
@@ -506,6 +533,7 @@
 			files = (
 				85F5C0C03D7D723557EF8B4C /* CalendarTests.swift in Sources */,
 				7D43A4CB0CF68541A85706FE /* DesignSystemTests.swift in Sources */,
+				C859DDC1B2F451761FC7CEA2 /* HabitDraftTests.swift in Sources */,
 				9E8004169367CAA79E66D0B6 /* HabitEngineTests.swift in Sources */,
 				811203E901E8883EE7FFB636 /* RecapTests.swift in Sources */,
 				BE0ADE7920F90CBFD80DF99D /* TestSupport.swift in Sources */,
@@ -525,17 +553,22 @@
 				FC56DECDD7CE5137F3AB27B6 /* Entry.swift in Sources */,
 				EB24BB8BF174DEB5026C8E5F /* EntryLog.swift in Sources */,
 				32733B352EEC6F42DA371E96 /* FloatingTabBar.swift in Sources */,
+				265C402AC9C5D7BCBF9D602D /* FormControls.swift in Sources */,
 				42B36CB8FFA3522A2CFDC9FC /* Habit.swift in Sources */,
 				5C0C11F328A25D4954A20820 /* HabitCard.swift in Sources */,
+				C5693FE1D3874B94B86525BA /* HabitDraft.swift in Sources */,
+				26BEBA3CFE87DA1DC3E0E1EF /* HabitEditorSheet.swift in Sources */,
 				FE9148EBF25D95891DC82831 /* HabitEngine.swift in Sources */,
 				B29085ACD998A1D6CFE3C0DF /* HabitPalette.swift in Sources */,
 				EFC53577DB6EBEA3731AB054 /* HabitSpec.swift in Sources */,
+				2B3CDE769CA33EDB468CCC4E /* HabitsView.swift in Sources */,
 				C4432E2F78D168C3ECF3AD13 /* PreviewData.swift in Sources */,
 				73C341B3B684AA797C31FD48 /* QuantityFormat.swift in Sources */,
 				58839CD40662EFCC98582D7F /* RituelApp.swift in Sources */,
 				FCD23C643E911756B54F158B /* RituelCalendar.swift in Sources */,
 				4FAA3CE4B693D5BA85C9D639 /* RituelStore.swift in Sources */,
 				1CC737FDB10FD199C6543742 /* RootView.swift in Sources */,
+				AF6944684E31E320D67F8C37 /* SettingsSection.swift in Sources */,
 				D02A068BC9E21B34556F6423 /* SoftWaves.swift in Sources */,
 				96ADBD61527D3E5AC2C49BE5 /* Theme.swift in Sources */,
 				FD25D4130281D93047A27460 /* TodayView.swift in Sources */,
@@ -555,6 +588,7 @@
 				5B1D43AE5A5FE93A6999E56A /* Entry.swift in Sources */,
 				11F40FE60B5BCE4108A46133 /* EntryLog.swift in Sources */,
 				BD209182FBD4634B1BA18CF0 /* Habit.swift in Sources */,
+				B4F7E7395648538F44B88138 /* HabitDraft.swift in Sources */,
 				422E6932D8D8B9E60BC3FD10 /* HabitEngine.swift in Sources */,
 				17101CA5BF81335E6862FD08 /* HabitPalette.swift in Sources */,
 				E3F081E15D72F1EDC0E0BC0A /* HabitSpec.swift in Sources */,
@@ -603,7 +637,7 @@
 		};
 		36F0C037FCAA4E34EDECBD25 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_43120DDC-AE38-4DA6-9653-D396D72517FE" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
@@ -732,7 +766,7 @@
 		};
 		EC6D07AA73BDB67E0B69B8FF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_43120DDC-AE38-4DA6-9653-D396D72517FE" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;

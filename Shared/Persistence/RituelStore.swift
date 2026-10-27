@@ -7,6 +7,59 @@ enum SharedDefaults {
     static var store: UserDefaults { UserDefaults(suiteName: AppConfig.appGroup) ?? .standard }
 
     static let firstNameKey = "firstName"
+    static let healthSleepImportKey = "healthSleepImport"
+    static let remindersEnabledKey = "remindersEnabled"
+}
+
+/// Crée, modifie, réordonne et supprime les habitudes.
+@MainActor
+struct HabitWriter {
+    let context: ModelContext
+
+    func save(_ spec: HabitSpec) {
+        let id = spec.id
+        let existing = try? context.fetch(FetchDescriptor<Habit>(predicate: #Predicate { $0.id == id })).first
+        if let existing {
+            existing.update(from: spec)
+        } else {
+            context.insert(Habit(spec))
+        }
+        commit()
+    }
+
+    /// Supprime l'habitude et toutes ses saisies, puis resserre l'ordre.
+    func delete(_ habitID: UUID) {
+        let optionalID: UUID? = habitID
+        let entries = (try? context.fetch(FetchDescriptor<Entry>(predicate: #Predicate { $0.habitID == optionalID }))) ?? []
+        entries.forEach(context.delete)
+        var habits = allHabits()
+        habits.filter { $0.id == habitID }.forEach(context.delete)
+        habits.removeAll { $0.id == habitID }
+        renumber(habits)
+        commit()
+    }
+
+    /// Applique un nouvel ordre (identifiants dans l'ordre voulu).
+    func reorder(_ orderedIDs: [UUID]) {
+        let byID = Dictionary(allHabits().map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        renumber(orderedIDs.compactMap { byID[$0] })
+        commit()
+    }
+
+    private func allHabits() -> [Habit] {
+        (try? context.fetch(FetchDescriptor<Habit>(sortBy: [SortDescriptor(\.sortIndex)]))) ?? []
+    }
+
+    private func renumber(_ habits: [Habit]) {
+        for (index, habit) in habits.enumerated() where habit.sortIndex != index {
+            habit.sortIndex = index
+        }
+    }
+
+    private func commit() {
+        try? context.save()
+        WidgetCenter.shared.reloadAllTimelines()
+    }
 }
 
 enum RituelStore {

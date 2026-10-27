@@ -26,14 +26,19 @@ enum RituelTab: CaseIterable, Identifiable {
 struct RootView: View {
     @Environment(\.modelContext) private var context
     @State private var tab: RituelTab = .today
+    @State private var startNewHabit = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
             Group {
                 switch tab {
-                case .today: TodayView()
+                case .today:
+                    TodayView {
+                        startNewHabit = true
+                        tab = .habits
+                    }
                 case .recap: ComingSoonView(eyebrow: "Récap de la semaine", title: "Bientôt ton récap")
-                case .habits: ComingSoonView(eyebrow: "Tes habitudes", title: "Bientôt la liste")
+                case .habits: HabitsView(startNew: $startNewHabit)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -46,8 +51,29 @@ struct RootView: View {
                 SoftWaves()
             }
         }
-        .task { DefaultHabits.seedIfNeeded(in: context) }
+        .task {
+            DefaultHabits.seedIfNeeded(in: context)
+            #if DEBUG
+            applyDebugLaunchOptions()
+            #endif
+        }
     }
+
+    #if DEBUG
+    /// Pour les captures : `-RituelTab habits|recap` choisit l'onglet, `-RituelNewHabit YES` ouvre la feuille.
+    private func applyDebugLaunchOptions() {
+        let defaults = UserDefaults.standard
+        switch defaults.string(forKey: "RituelTab") {
+        case "recap": tab = .recap
+        case "habits": tab = .habits
+        default: break
+        }
+        if defaults.bool(forKey: "RituelNewHabit") {
+            startNewHabit = true
+            tab = .habits
+        }
+    }
+    #endif
 }
 
 /// Onglets des étapes 4 et 5, en attendant.
