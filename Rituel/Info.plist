@@ -32,9 +32,8 @@
 	<string>$(ICLOUD_CONTAINER)</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FrauncesSoft-Display.ttf</string>
-		<string>FrauncesSoft-Text.ttf</string>
-		<string>FrauncesSoft-Light.ttf</string>
+		<string>Outfit-Bold.ttf</string>
+		<string>Outfit-Medium.ttf</string>
 		<string>Figtree-Regular.ttf</string>
 		<string>Figtree-SemiBold.ttf</string>
 		<string>Figtree-Bold.ttf</string>

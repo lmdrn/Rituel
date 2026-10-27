@@ -4,7 +4,6 @@ import SwiftUI
 struct PresetsRow: View {
     let habit: HabitSpec
     let dayValue: Double
-    let tint: Color
     let perform: (EntryAction) -> Void
 
     var body: some View {
@@ -30,10 +29,10 @@ struct PresetsRow: View {
                 Button { perform(.clear) } label: {
                     Text(verbatim: habit.entryMode == .add ? "↺" : "×")
                         .font(.rituel(.semibold, size: 15, relativeTo: .subheadline))
-                        .foregroundStyle(.ink2)
-                        .frame(width: 34)
+                        .foregroundStyle(.accentText)
+                        .frame(width: 40)
                         .frame(maxHeight: .infinity)
-                        .background { Pebble(shape: RoundedRectangle(cornerRadius: 12, style: .continuous), base: .surface2, lifted: false) }
+                        .background { Pebble(shape: Capsule(), base: .accentSoft, lifted: false) }
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(habit.entryMode == .add ? "Remettre à zéro ce jour" : "Effacer ce jour")
@@ -45,19 +44,18 @@ struct PresetsRow: View {
     private func presetButton(_ title: String, isOn: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(verbatim: title)
-                .font(.rituel(.semibold, size: 13, relativeTo: .subheadline))
+                .font(.rituel(.bold, size: 14, relativeTo: .subheadline))
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
-                .foregroundStyle(isOn ? Color(hex: 0x3A2E33) : Color.ink)
+                .foregroundStyle(isOn ? Color.accentInk : Color.accentText)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 9)
+                .padding(.vertical, 11)
                 .padding(.horizontal, 2)
                 .background {
-                    Pebble(shape: RoundedRectangle(cornerRadius: 12, style: .continuous),
-                           base: isOn ? tint : .surface, tint: isOn ? nil : tint, tintOpacity: 0.12, lifted: false)
+                    Pebble(shape: Capsule(), base: isOn ? .accent : .accentSoft, lifted: false, glows: isOn)
                 }
-                .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .contentShape(Capsule())
         }
         .buttonStyle(PressScaleStyle())
     }
@@ -91,7 +89,7 @@ struct MiniWeek: View {
     }
 
     private func cell(_ state: DayCellState, text: String, current: Bool) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 7, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: 9, style: .continuous)
         let (fg, bg): (Color, Color) = switch state {
         case .ok: (.ok, .okSoft)
         case .over: (.over, .overSoft)
@@ -104,7 +102,7 @@ struct MiniWeek: View {
             .lineLimit(1)
             .minimumScaleFactor(0.7)
             .foregroundStyle(fg)
-            .frame(maxWidth: .infinity, minHeight: 22)
+            .frame(maxWidth: .infinity, minHeight: 24)
             .background { if state != .future { Well(shape: shape, color: bg) } }
             .overlay {
                 if state == .future {

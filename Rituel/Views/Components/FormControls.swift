@@ -127,7 +127,7 @@ struct CountStepper: View {
         HStack(spacing: 14) {
             stepButton("−", label: "Moins", enabled: canDecrement) { onStep(-1) }
             Text(verbatim: value)
-                .font(.rituel(.displayText, size: 30, relativeTo: .title))
+                .font(.rituel(.title, size: 30, relativeTo: .title))
                 .monospacedDigit()
                 .foregroundStyle(.ink)
                 .frame(minWidth: 44)
@@ -174,8 +174,8 @@ struct PillButtonStyle: ButtonStyle {
             .padding(.horizontal, kind == .ghost ? 8 : 18)
             .background {
                 switch kind {
-                case .primary: Pebble(shape: Capsule(), base: .accent, lifted: false)
-                case .soft: Pebble(shape: Capsule(), base: .surface2, lifted: false)
+                case .primary: Pebble(shape: Capsule(), base: .accent, lifted: false, glows: true)
+                case .soft: Pebble(shape: Capsule(), base: .accentSoft, lifted: false)
                 case .ghost: Color.clear
                 }
             }
@@ -187,7 +187,7 @@ struct PillButtonStyle: ButtonStyle {
     private var foreground: Color {
         switch kind {
         case .primary: .accentInk
-        case .soft: .ink
+        case .soft: .accentText
         case .ghost: .over
         }
     }

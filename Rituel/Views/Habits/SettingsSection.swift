@@ -6,6 +6,8 @@ struct SettingsSection: View {
     @AppStorage(SharedDefaults.healthSleepImportKey, store: SharedDefaults.store) private var importSleep = false
     @AppStorage(SharedDefaults.remindersEnabledKey, store: SharedDefaults.store) private var remindersEnabled = true
     @FocusState private var nameFocused: Bool
+    @Environment(\.modelContext) private var context
+    @State private var cloudAvailable = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -35,20 +37,33 @@ struct SettingsSection: View {
 
                 divider
 
-                HStack(spacing: 8) {
-                    Circle().fill(Color.ink3).frame(width: 7, height: 7)
-                    Text("Enregistré sur cet appareil")
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Circle().fill(cloudAvailable ? Color.ok : Color.ink3).frame(width: 7, height: 7)
+                    Text(cloudAvailable ? "Synchronisé avec iCloud entre tes appareils"
+                                        : "Enregistré sur cet appareil. Connecte-toi à iCloud pour retrouver tes habitudes ailleurs.")
                         .font(.rituel(.regular, size: 12, relativeTo: .caption))
                         .foregroundStyle(.ink2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("Synchro iCloud : enregistré sur cet appareil")
+                .task { cloudAvailable = await CloudStatus.isSyncing() }
+
             }
             .padding(16)
             .cardStyle()
         }
         .onChange(of: firstName) { _, name in
             if name.count > HabitSpec.maxNameLength { firstName = String(name.prefix(HabitSpec.maxNameLength)) }
+        }
+        .onChange(of: importSleep) { _, on in
+            guard on else { return }
+            Task {
+                await SleepImporter.requestAuthorization()
+                await SleepImporter.importLastNight(into: context)
+            }
+        }
+        .onChange(of: remindersEnabled) { _, _ in
+            Task { await ReminderScheduler.sync() }
         }
     }
 

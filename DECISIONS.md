@@ -98,3 +98,23 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **Creux** (`Well`) : les petits éléments sont enfoncés dans la matière, c'est-à-dire les pastilles de statut, les cases de la mini-frise et de la grille, les pistes de progression, le fond des contrôles segmentés et les champs texte. Les pilules et barres remplies sont des galets.
 - Les galets n'ont plus de contour : le volume suffit à les détacher.
 - Le mélange de la teinte d'une habitude et de la surface est opaque (`Color.mixed`), pour que les ombres internes restent nettes.
+
+## Étape 7 — Rappels, Santé, Raccourcis
+
+- **Rappels ponctuels plutôt que répétés** : `ReminderPlanner` (pur, testé) prévoit une notification par jour sur les 7 prochains jours, à l'heure de chaque habitude. Un objectif déjà atteint n'est plus rappelé jusqu'à la fin de sa période (le reste de la journée, de la semaine ou du mois). Les limites restent rappelées. Au plus 60 notifications en attente (iOS en garde 64). Le programme est refait au lancement, au retour au premier plan, à chaque saisie (app, widget, notification) et à chaque modification d'une habitude.
+- **Textes des rappels** : « As-tu bu ton eau ? » (objectif en ml), « As-tu noté ta nuit ? » (objectif en heures), « Un petit moment pour sport aujourd'hui ? » (autres objectifs), « Comment ça se passe avec café froid aujourd'hui ? Note-le si besoin. » (limites).
+- **Bouton d'action** : une catégorie de notification par habitude, avec un bouton à son nom. « Fait » pour un comptage, « +250 ml » pour une quantité qu'on additionne, « 8h » pour une valeur du jour (même logique que le bouton rapide des widgets). L'action passe par `LogHabitIntent`, sans ouvrir l'app.
+- **Permission** : demandée seulement quand on enregistre une habitude avec un rappel. L'interrupteur « Rappels » des réglages coupe ou rétablit tous les rappels.
+- **Santé** : lecture seule de `sleepAnalysis`. On ne garde que les phases de sommeil réel (`allAsleepValues`), pas le temps au lit. La fenêtre va de la veille 18 h à aujourd'hui 14 h. Les phases qui se chevauchent (montre et iPhone) sont fusionnées, puis le total est arrondi au quart d'heure (`SleepMath`, testé). La valeur va dans l'habitude Sommeil par défaut, sinon dans la première valeur du jour en heures. Import au lancement, au retour au premier plan et à l'activation de l'interrupteur.
+- **Priorité de la saisie manuelle** : `Entry.source` (nouveau champ optionnel, compatible CloudKit) vaut `health` pour un import et `nil` pour une saisie à la main. L'import n'écrase jamais une saisie à la main. Limite connue : une saisie à la main effacée (retour à 0) n'existe plus, et l'import suivant remplira la nuit.
+- **Siri et Raccourcis** : « Noter une habitude » (habitude au choix, quantité facultative ; sans quantité, le choix rapide habituel ; une valeur du jour est fixée sans bascule grâce à l'action `.replace`) et « Ajouter de l'eau » (250 ml par défaut). Phrases : « Noter Sport dans Rituel », « Ajouter de l'eau dans Rituel ». Siri répond par exemple : « C'est noté : Eau, 1,8L sur 2L. Encore 250 ml. » La liste des habitudes proposées à Siri est mise à jour à chaque modification.
+
+## Thème « Marguerite » (choisi le 27 octobre 2026, remplace « soft clay »)
+
+- **Choix de Léa** : elle a essayé 4 directions dans un laboratoire temporaire (Argile, Lanterne, Herbier, Marguerite) et a retenu Marguerite, construite à partir du logo, en la voulant « moins flat » et plus animée. Le laboratoire, ses polices et les trois autres directions ont été retirés.
+- **Référence complète** : `DESIGN_SYSTEM.md` (couleurs clair/sombre, typographie, formes, profondeur, Liquid Glass, animations, haptiques).
+- **Polices** : Outfit (titres et chiffres) remplace Fraunces ; Figtree reste pour le texte.
+- **Marguerite en une seule forme** : `DaisyPetals` réunit les 7 pétales (`Path.union`) pour qu'aucune superposition ne se voie, même avec les dégradés et les ombres internes (demandé par Léa).
+- **La fleur est le bouton rond** pour les comptages (un tap = +1), avec en plus un bouton « +1 » plein et « −1 » quand le jour en a. Pour les quantités, la fleur montre la progression et les choix rapides sont des capsules pervenche.
+- **« Objectif atteint »** est maintenant en doré (`sunText` sur `edgeSoft`), comme le cœur qui s'allume. Le vert reste pour une limite respectée.
+- **En-tête** : la grande marguerite qui respire et tourne remplace la forme organique du brief. Elle garde son rôle (une forme qui respire derrière le titre, 9 s, coupée par Réduire les animations).

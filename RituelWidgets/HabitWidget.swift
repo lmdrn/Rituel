@@ -1,7 +1,7 @@
 import SwiftUI
 import WidgetKit
 
-/// Petit widget : une habitude au choix, son total, son statut et un gros bouton de saisie.
+/// Petit widget : une habitude au choix, sa marguerite, son total, son statut et un gros bouton de saisie.
 struct HabitWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: "fr.rituel.habit", intent: SelectHabitIntent.self, provider: HabitProvider()) { entry in
@@ -19,14 +19,15 @@ struct HabitWidgetView: View {
 
     var body: some View {
         if let habit = entry.data.habit(entry.habitID) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
                 WidgetHabitName(habit: habit)
-                Spacer(minLength: 0)
-                HStack(alignment: .bottom, spacing: 6) {
-                    WidgetValue(habit: habit, size: 24)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    QuickButton(habit: habit, size: 54)
+                HStack(alignment: .center) {
+                    WidgetDaisy(habit: habit).frame(width: 50, height: 50)
+                    Spacer(minLength: 4)
+                    QuickButton(habit: habit, size: 52)
                 }
+                .frame(maxHeight: .infinity)
+                WidgetValue(habit: habit, size: 20)
                 WidgetChip(status: habit.status)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

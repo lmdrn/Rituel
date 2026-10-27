@@ -1,5 +1,7 @@
+import CoreData
 import SwiftData
 import SwiftUI
+import WidgetKit
 
 enum RituelTab: CaseIterable, Identifiable {
     case today, recap, habits
@@ -53,8 +55,16 @@ struct RootView: View {
         .background {
             ZStack {
                 Color.canvas.ignoresSafeArea()
-                SoftWaves()
+                // Halo pervenche en haut de l'écran, qui donne de la profondeur au fond.
+                RadialGradient(colors: [Color.accent.opacity(0.16), .clear], center: .top, startRadius: 0, endRadius: 420)
+                    .ignoresSafeArea()
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange).receive(on: RunLoop.main)) { _ in
+            // Des données sont arrivées d'un autre appareil : widgets et rappels suivent.
+            HabitWriter(context: context).removeSyncDuplicates()
+            WidgetCenter.shared.reloadAllTimelines()
+            Task { await ReminderScheduler.sync() }
         }
         .onChange(of: scenePhase) { _, phase in
             switch phase {
@@ -63,6 +73,7 @@ struct RootView: View {
             case .active where wasInBackground:
                 wasInBackground = false
                 refreshID += 1
+                Task { await refreshNativeData() }
             default:
                 break
             }
@@ -72,7 +83,16 @@ struct RootView: View {
             #if DEBUG
             applyDebugLaunchOptions()
             #endif
+            RituelShortcuts.updateAppShortcutParameters()
+            await refreshNativeData()
         }
+    }
+
+    /// Au lancement et au retour au premier plan : doublons de synchro, sommeil de la nuit, puis rappels des prochains jours.
+    private func refreshNativeData() async {
+        HabitWriter(context: context).removeSyncDuplicates()
+        await SleepImporter.importLastNight(into: context)
+        await ReminderScheduler.sync()
     }
 
     #if DEBUG

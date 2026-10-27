@@ -77,7 +77,7 @@ struct HabitEditorSheet: View {
                             .fill(draft.spec.color.color)
                             .frame(width: 6)
                     }
-                    .claySurface(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .raisedSurface(RoundedRectangle(cornerRadius: 16, style: .continuous))
                     .accessibilityLabel(Text(verbatim: "Aperçu : \(draft.previewText)"))
 
                 actions

@@ -24,7 +24,17 @@ enum EntryAction: Equatable, Sendable {
     /// Fixe la valeur du jour ; retaper la même valeur l'efface.
     case set(Double)
     case add(Double)
+    /// Fixe la valeur du jour sans bascule (Siri, import Santé).
+    case replace(Double)
     case clear
+
+    /// La valeur portée par l'action, s'il y en a une.
+    var amount: Double? {
+        switch self {
+        case .set(let v), .add(let v), .replace(let v): v
+        case .increment, .decrement, .clear: nil
+        }
+    }
 }
 
 /// État d'une case de la mini-frise d'une habitude quotidienne.
@@ -108,6 +118,7 @@ enum HabitEngine {
         case .decrement: max(0, current - 1)
         case .set(let v): QuantityFormat.r2(current) == QuantityFormat.r2(v) ? 0 : v
         case .add(let v): QuantityFormat.r2(current + v)
+        case .replace(let v): max(0, v)
         case .clear: 0
         }
     }

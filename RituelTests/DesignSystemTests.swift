@@ -22,14 +22,14 @@ struct DesignSystemTests {
 
     @Test func colorTokensExistInTheAssetCatalog() {
         let names = ["Canvas", "Surface", "SurfaceHigh", "Surface2", "Line", "Ink", "Ink2", "Ink3", "Accent", "AccentSoft",
-                     "AccentInk", "AccentText", "Sun", "Mist", "Blush", "Ok", "OkSoft", "Edge", "EdgeSoft", "Over", "OverSoft"]
+                     "AccentInk", "AccentText", "Sun", "SunText", "Ok", "OkSoft", "Edge", "EdgeSoft", "Over", "OverSoft"]
         for name in names {
             #expect(UIColor(named: name, in: .main, compatibleWith: nil) != nil, "Couleur manquante : \(name)")
         }
     }
 
     @Test func fontsAreRegistered() {
-        for face in [RituelFontFace.display, .displayText, .displayLight, .regular, .semibold, .bold] {
+        for face in [RituelFontFace.title, .titleMedium, .regular, .semibold, .bold] {
             #expect(UIFont(name: face.rawValue, size: 15) != nil, "Police manquante : \(face.rawValue)")
         }
     }

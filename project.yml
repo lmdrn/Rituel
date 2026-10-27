@@ -73,10 +73,9 @@ targets:
           - UIInterfaceOrientationLandscapeRight
         UIBackgroundModes:
           - remote-notification
-        UIAppFonts: &fonts
-          - FrauncesSoft-Display.ttf
-          - FrauncesSoft-Text.ttf
-          - FrauncesSoft-Light.ttf
+        UIAppFonts:
+          - Outfit-Bold.ttf
+          - Outfit-Medium.ttf
           - Figtree-Regular.ttf
           - Figtree-SemiBold.ttf
           - Figtree-Bold.ttf
@@ -110,7 +109,12 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
-        UIAppFonts: *fonts
+        UIAppFonts:
+          - Outfit-Bold.ttf
+          - Outfit-Medium.ttf
+          - Figtree-Regular.ttf
+          - Figtree-SemiBold.ttf
+          - Figtree-Bold.ttf
         RituelAppGroup: $(APP_GROUP)
 
   RituelTests:

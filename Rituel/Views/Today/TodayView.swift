@@ -129,26 +129,7 @@ private struct TodayHero: View {
     let lede: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            BrandHeader(date: date)
-                .padding(.bottom, 14)
-            Text(RituelCalendar.current.longDate(date))
-                .eyebrow()
-            Text(greeting)
-                .font(.rituelLargeTitle)
-                .foregroundStyle(.ink)
-                .accessibilityAddTraits(.isHeader)
-            Text(lede)
-                .font(.rituelBody)
-                .foregroundStyle(.ink2)
-                .frame(maxWidth: 340, alignment: .leading)
-                .padding(.top, 6)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .topTrailing) {
-            BreathingBlob()
-                .offset(x: 6, y: 30)
-        }
+        HeroCard(date: date, eyebrow: RituelCalendar.current.longDate(date), title: greeting, subtitle: lede)
     }
 }
 

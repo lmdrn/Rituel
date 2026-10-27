@@ -13,17 +13,3 @@ struct BrandMark: View {
             .accessibilityHidden(true)
     }
 }
-
-/// Marque + nom « Rituel » en Fraunces.
-struct BrandLockup: View {
-    var body: some View {
-        HStack(spacing: 9) {
-            BrandMark()
-            Text(verbatim: "Rituel")
-                .font(.rituelBrand)
-                .foregroundStyle(.ink)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isHeader)
-    }
-}

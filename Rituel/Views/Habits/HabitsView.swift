@@ -66,22 +66,9 @@ struct HabitsView: View {
     }
 
     private var hero: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            BrandHeader().padding(.bottom, 14)
-            Text("\(habits.count) \(HabitEngine.plural(Double(habits.count), "habitude"))").eyebrow()
-            Text("Tes habitudes")
-                .font(.rituelLargeTitle)
-                .foregroundStyle(.ink)
-                .accessibilityAddTraits(.isHeader)
-            Text("Des limites pour ce que tu veux réduire, des objectifs pour ce que tu veux cultiver.")
-                .font(.rituelBody)
-                .foregroundStyle(.ink2)
-                .padding(.top, 6)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .topTrailing) {
-            BreathingBlob().offset(x: 6, y: 30)
-        }
+        HeroCard(eyebrow: "\(habits.count) \(HabitEngine.plural(Double(habits.count), "habitude"))",
+                 title: "Tes habitudes",
+                 subtitle: "Des limites pour ce que tu veux réduire, des objectifs pour ce que tu veux cultiver.")
     }
 
     // MARK: Actions
@@ -92,10 +79,18 @@ struct HabitsView: View {
 
     private func save(_ spec: HabitSpec) {
         HabitWriter(context: context).save(spec)
+        RituelShortcuts.updateAppShortcutParameters()
+        Task {
+            // La permission n'est demandée qu'au premier rappel activé.
+            if spec.reminderMinutes != nil { await ReminderScheduler.requestAuthorizationIfNeeded() }
+            await ReminderScheduler.sync()
+        }
     }
 
     private func delete(_ id: UUID) {
         HabitWriter(context: context).delete(id)
+        RituelShortcuts.updateAppShortcutParameters()
+        Task { await ReminderScheduler.sync() }
     }
 
     private func move(from source: IndexSet, to destination: Int) {
@@ -119,7 +114,7 @@ private struct HabitRow: View {
     var body: some View {
         Button(action: onEdit) {
             HStack(spacing: 12) {
-                Circle().fill(spec.color.color).frame(width: 14, height: 14)
+                Daisy(filled: 7, tint: spec.color.color).frame(width: 26, height: 26)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(spec.name)
                         .font(.rituelBodyStrong)

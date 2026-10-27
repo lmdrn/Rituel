@@ -46,6 +46,28 @@ struct HabitWriter {
         commit()
     }
 
+    /// Après une synchro iCloud : deux appareils ont pu créer les mêmes habitudes par défaut, ou noter le même jour.
+    /// On garde l'habitude la plus ancienne et l'entrée la plus récente.
+    func removeSyncDuplicates() {
+        let habits = allHabits()
+        let extraHabits = Deduplication.redundant(habits, key: \.id) { $0.createdAt < $1.createdAt }
+        let entries = (try? context.fetch(FetchDescriptor<Entry>())) ?? []
+        let extraEntries = Deduplication.redundant(entries, key: { EntryKey(habitID: $0.habitID, day: $0.day) }) {
+            $0.updatedAt > $1.updatedAt
+        }
+        guard !extraHabits.isEmpty || !extraEntries.isEmpty else { return }
+        extraHabits.forEach { context.delete(habits[$0]) }
+        extraEntries.forEach { context.delete(entries[$0]) }
+        let removed = Set(extraHabits)
+        renumber(habits.indices.filter { !removed.contains($0) }.map { habits[$0] })
+        commit()
+    }
+
+    private struct EntryKey: Hashable {
+        let habitID: UUID?
+        let day: Date
+    }
+
     private func allHabits() -> [Habit] {
         (try? context.fetch(FetchDescriptor<Habit>(sortBy: [SortDescriptor(\.sortIndex)]))) ?? []
     }
@@ -65,8 +87,14 @@ struct HabitWriter {
 enum RituelStore {
     static let schema = Schema([Habit.self, Entry.self])
 
+    /// Seule l'app synchronise avec iCloud. Le widget ouvre la même base locale, sans CloudKit,
+    /// pour qu'un seul processus fasse la synchro.
+    static let syncsWithCloud = Bundle.main.bundleURL.pathExtension == "app"
+
     /// Conteneur unique du processus (app ou widget). Les deux ouvrent la même base dans l'App Group.
     static let shared: ModelContainer = {
+        if syncsWithCloud, let container = try? makeContainer(cloudKit: true) { return container }
+        // Sans iCloud configuré (pas de Team ID, simulateur), on garde la base locale.
         do {
             return try makeContainer()
         } catch {
@@ -75,11 +103,11 @@ enum RituelStore {
     }()
 
     /// Base SwiftData dans l'App Group, lue et écrite par l'app et le widget.
-    /// La synchro iCloud sera branchée à l'étape 8.
-    static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
+    static func makeContainer(inMemory: Bool = false, cloudKit: Bool = false) throws -> ModelContainer {
         let configuration = inMemory
             ? ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
-            : ModelConfiguration(schema: schema, url: storeURL, cloudKitDatabase: .none)
+            : ModelConfiguration(schema: schema, url: storeURL,
+                                 cloudKitDatabase: cloudKit ? .private(AppConfig.cloudKitContainer) : .none)
         return try ModelContainer(for: schema, configurations: [configuration])
     }
 
@@ -112,9 +140,27 @@ struct EntryWriter {
         // et une nouvelle ligne est toujours relue correctement par l'autre processus.
         existing.forEach(context.delete)
         if value > 0 { context.insert(Entry(habitID: habitID, day: start, value: value, updatedAt: now)) }
+        didChange()
+        return value
+    }
+
+    /// Valeur importée (Santé) : n'écrase jamais une saisie faite à la main. Renvoie `true` si elle a été écrite.
+    @discardableResult
+    func importValue(_ value: Double, habitID: UUID, day: Date, source: String, now: Date = .now) -> Bool {
+        let start = calendar.day(day)
+        let existing = entries(habitID: habitID, day: start)
+        guard !existing.contains(where: { $0.source == nil }) else { return false }
+        if let current = existing.first, QuantityFormat.r2(current.value) == QuantityFormat.r2(value) { return false }
+        existing.forEach(context.delete)
+        if value > 0 { context.insert(Entry(habitID: habitID, day: start, value: value, updatedAt: now, source: source)) }
+        didChange()
+        return true
+    }
+
+    private func didChange() {
         try? context.save()
         WidgetCenter.shared.reloadAllTimelines()
-        return value
+        Task { await ReminderScheduler.sync() }
     }
 
     func entries(habitID: UUID, day start: Date) -> [Entry] {

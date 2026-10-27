@@ -2,18 +2,32 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-/// Fond commun des widgets : sable, avec une vague douce.
+/// Fond commun des widgets : lavande très clair avec un halo pervenche, et une marguerite en filigrane.
 struct WidgetBackdrop: View {
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             LinearGradient(colors: [.surfaceHigh, .canvas], startPoint: .top, endPoint: .bottom)
-            Wave(phase: 0.6, amplitude: 0.1, baseline: 0.2)
-                .fill(Color.blush.opacity(0.35))
+            RadialGradient(colors: [Color.accent.opacity(0.14), .clear], center: .topTrailing, startRadius: 0, endRadius: 200)
+            DaisyPetals()
+                .fill(Color.accent.opacity(0.06))
+                .frame(width: 140, height: 140)
+                .offset(x: 46, y: 46)
         }
     }
 }
 
-/// Bouton galet de saisie rapide, qui note directement depuis le widget.
+/// Marguerite de progression d'une habitude dans un widget.
+struct WidgetDaisy: View {
+    let habit: WidgetHabit
+
+    var body: some View {
+        Daisy(filled: Int((habit.fraction * 7).rounded(.down)), tint: habit.spec.color.color, heartLit: habit.status.tone == .done)
+            .widgetAccentable()
+            .accessibilityHidden(true)
+    }
+}
+
+/// Bouton gelée pervenche de saisie rapide, qui note directement depuis le widget.
 struct QuickButton: View {
     let habit: WidgetHabit
     var size: CGFloat = 54
@@ -22,14 +36,14 @@ struct QuickButton: View {
     var body: some View {
         Button(intent: LogHabitIntent(habitID: habit.id, action: habit.quick.action)) {
             Text(verbatim: habit.quick.label)
-                .font(.rituel(.bold, size: fontSize, relativeTo: .body))
+                .font(.rituel(.title, size: fontSize, relativeTo: .body))
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
-                .foregroundStyle(.ink)
+                .foregroundStyle(.accentInk)
                 .padding(.horizontal, 4)
                 .frame(width: size, height: size)
-                .background { Pebble(shape: Circle(), base: .surface, tint: habit.spec.color.color, tintOpacity: 0.55) }
+                .background { Pebble(shape: Circle(), base: .accent, lifted: false, glows: true) }
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(verbatim: "Noter \(habit.spec.name), \(habit.quick.label)"))
@@ -38,16 +52,13 @@ struct QuickButton: View {
 
 struct WidgetHabitName: View {
     let habit: WidgetHabit
-    var font: Font = .rituel(.semibold, size: 14, relativeTo: .subheadline)
+    var font: Font = .rituel(.title, size: 15, relativeTo: .subheadline)
 
     var body: some View {
-        HStack(spacing: 6) {
-            Circle().fill(habit.spec.color.color).frame(width: 8, height: 8).widgetAccentable()
-            Text(habit.spec.name)
-                .font(font)
-                .foregroundStyle(.ink)
-                .lineLimit(1)
-        }
+        Text(habit.spec.name)
+            .font(font)
+            .foregroundStyle(.ink)
+            .lineLimit(1)
     }
 }
 
@@ -59,11 +70,11 @@ struct WidgetValue: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 3) {
             Text(verbatim: habit.totalText)
-                .font(.rituel(.displayText, size: size, relativeTo: .title))
+                .font(.rituel(.title, size: size, relativeTo: .title))
                 .foregroundStyle(.ink)
                 .contentTransition(.numericText())
             Text(verbatim: "/ \(habit.targetText)")
-                .font(.rituel(.regular, size: max(11, size * 0.45), relativeTo: .caption))
+                .font(.rituel(.semibold, size: max(11, size * 0.45), relativeTo: .caption))
                 .foregroundStyle(.ink2)
         }
         .monospacedDigit()
@@ -89,10 +100,11 @@ struct WidgetEmptyState: View {
 extension StatusTone {
     var colors: (fg: Color, bg: Color) {
         switch self {
-        case .ok, .done: (.ok, .okSoft)
+        case .ok: (.ok, .okSoft)
+        case .done: (.sunText, .edgeSoft)
         case .edge: (.edge, .edgeSoft)
         case .over: (.over, .overSoft)
-        case .progress: (.ink2, .surface2)
+        case .progress: (.accentText, .accentSoft)
         }
     }
 }
@@ -102,7 +114,7 @@ struct WidgetChip: View {
 
     var body: some View {
         Text(verbatim: status.label)
-            .font(.rituel(.semibold, size: 11, relativeTo: .caption2))
+            .font(.rituel(.bold, size: 11, relativeTo: .caption2))
             .lineLimit(1)
             .minimumScaleFactor(0.8)
             .foregroundStyle(status.tone.colors.fg)

@@ -81,7 +81,7 @@ private struct DayButton: View {
             .padding(.bottom, 7)
             .background {
                 if isSelected {
-                    Pebble(shape: RoundedRectangle(cornerRadius: 14, style: .continuous), base: .accent, lifted: false)
+                    Pebble(shape: RoundedRectangle(cornerRadius: 16, style: .continuous), base: .accent, lifted: false, glows: true)
                 }
             }
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))

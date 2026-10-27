@@ -59,15 +59,15 @@ struct TodayWidgetView: View {
                 Spacer()
                 HStack(alignment: .firstTextBaseline, spacing: 1) {
                     Text(verbatim: "\(entry.data.score)")
-                        .font(.rituel(.displayLight, size: 30, relativeTo: .title))
+                        .font(.rituel(.title, size: 28, relativeTo: .title))
                     Text(verbatim: "%")
-                        .font(.rituel(.displayLight, size: 14, relativeTo: .caption))
+                        .font(.rituel(.title, size: 14, relativeTo: .caption))
                 }
                 .monospacedDigit()
-                .foregroundStyle(.accentText)
+                .foregroundStyle(.accentInk)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
-                .background { Pebble(shape: Capsule(), lifted: false) }
+                .background { Pebble(shape: Capsule(), base: .accent, lifted: false, glows: true) }
                 .accessibilityLabel(Text(verbatim: "Équilibre de la semaine, \(entry.data.score) %"))
             }
             VStack(spacing: 6) {
@@ -85,9 +85,10 @@ private struct CompactTile: View {
     let habit: WidgetHabit
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
+            WidgetDaisy(habit: habit).frame(width: 30, height: 30)
             VStack(alignment: .leading, spacing: 2) {
-                WidgetHabitName(habit: habit, font: .rituel(.semibold, size: 13, relativeTo: .subheadline))
+                WidgetHabitName(habit: habit, font: .rituel(.title, size: 13, relativeTo: .subheadline))
                 WidgetValue(habit: habit, size: 17)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -95,7 +96,7 @@ private struct CompactTile: View {
         }
         .padding(.horizontal, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .claySurface(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .raisedSurface(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 }
 
@@ -105,6 +106,7 @@ private struct LargeRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
+            WidgetDaisy(habit: habit).frame(width: 26, height: 26)
             VStack(alignment: .leading, spacing: 1) {
                 WidgetHabitName(habit: habit)
                 Text(verbatim: habit.status.label)
@@ -119,7 +121,7 @@ private struct LargeRow: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
-        .claySurface(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .raisedSurface(RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
 

@@ -10,12 +10,17 @@ final class Entry {
     var value: Double = 0
     /// Départage deux entrées du même jour arrivées par la synchro.
     var updatedAt: Date = Date.now
+    /// `nil` pour une saisie à la main, `health` pour un import depuis Santé.
+    var source: String?
 
-    init(habitID: UUID, day: Date, value: Double, updatedAt: Date = .now) {
+    static let healthSource = "health"
+
+    init(habitID: UUID, day: Date, value: Double, updatedAt: Date = .now, source: String? = nil) {
         self.habitID = habitID
         self.day = day
         self.value = value
         self.updatedAt = updatedAt
+        self.source = source
     }
 
     var record: EntryRecord? {

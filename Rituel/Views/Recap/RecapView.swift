@@ -38,18 +38,7 @@ private struct RecapContent: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: Metrics.sectionSpacing) {
-                VStack(alignment: .leading, spacing: 2) {
-                    BrandHeader().padding(.bottom, 14)
-                    Text("Récap de la semaine").eyebrow()
-                    Text(verbatim: recap.title)
-                        .font(.rituelLargeTitle)
-                        .foregroundStyle(.ink)
-                        .accessibilityAddTraits(.isHeader)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(alignment: .topTrailing) {
-                    BreathingBlob().offset(x: 6, y: 30)
-                }
+                HeroCard(eyebrow: "Récap de la semaine", title: recap.title)
 
                 HStack {
                     ChevronButton(direction: -1, label: "Semaine précédente") { moveWeek(-7) }
@@ -113,7 +102,7 @@ private struct ScoreCard: View {
                     Text(verbatim: "\(recap.score)")
                         .font(.rituelScore)
                     Text(verbatim: "%")
-                        .font(.rituel(.displayLight, size: 26, relativeTo: .title))
+                        .font(.rituel(.title, size: 26, relativeTo: .title))
                 }
                 .monospacedDigit()
                 .foregroundStyle(.accentText)
@@ -157,7 +146,7 @@ private struct ScoreDots: View {
             ForEach(0..<20, id: \.self) { i in
                 Group {
                     if i < on {
-                        Pebble(shape: Capsule(), base: i >= 14 ? .sun : .accent, lifted: false)
+                        Pebble(shape: Capsule(), base: i >= 14 ? .sun : .accent, lifted: false, glows: true)
                     } else {
                         Well(shape: Capsule())
                     }
@@ -209,7 +198,10 @@ private struct RecapRowView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Circle().fill(row.habit.color.color).frame(width: 10, height: 10).padding(.top, 6)
+            Daisy(filled: 7, tint: row.habit.color.color, heartLit: row.state == .kept)
+                .frame(width: 20, height: 20)
+                .padding(.top, 1)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(row.habit.name)
                     .font(.rituelBodyStrong)
