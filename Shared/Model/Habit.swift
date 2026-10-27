@@ -18,6 +18,11 @@ final class Habit {
     var sortIndex: Int = 0
     /// Rappel quotidien, en minutes depuis minuit.
     var reminderMinutes: Int?
+    /// Place dans le résumé d'Aujourd'hui (0, 1, 2), ou `nil`.
+    var summaryRank: Int?
+    var healthSourceRaw: String?
+    var healthMinMinutes: Int = 0
+    var healthWorkoutKindRaw: String?
     var createdAt: Date = Date.now
 
     init(_ spec: HabitSpec, createdAt: Date = .now) {
@@ -39,7 +44,11 @@ final class Habit {
             entryMode: EntryMode(rawValue: entryModeRaw) ?? .set,
             presets: presets,
             sortIndex: sortIndex,
-            reminderMinutes: reminderMinutes
+            reminderMinutes: reminderMinutes,
+            summaryRank: summaryRank,
+            healthSource: healthSourceRaw.flatMap(HealthSource.init(rawValue:)),
+            healthMinMinutes: healthMinMinutes,
+            healthWorkoutKind: healthWorkoutKindRaw.flatMap(WorkoutKind.init(rawValue:))
         )
     }
 
@@ -56,5 +65,9 @@ final class Habit {
         presets = Array(spec.presets.prefix(HabitSpec.maxPresets))
         sortIndex = spec.sortIndex
         reminderMinutes = spec.reminderMinutes
+        summaryRank = spec.summaryRank
+        healthSourceRaw = spec.healthSource?.rawValue
+        healthMinMinutes = spec.healthMinMinutes
+        healthWorkoutKindRaw = spec.healthWorkoutKind?.rawValue
     }
 }

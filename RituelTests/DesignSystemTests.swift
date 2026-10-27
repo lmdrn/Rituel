@@ -21,7 +21,7 @@ struct DesignSystemTests {
     }
 
     @Test func colorTokensExistInTheAssetCatalog() {
-        let names = ["Canvas", "Surface", "SurfaceHigh", "Surface2", "Line", "Ink", "Ink2", "Ink3", "Accent", "AccentSoft",
+        let names = ["Canvas", "Surface", "Surface2", "Line", "Ink", "Ink2", "Ink3", "Accent", "AccentSoft",
                      "AccentInk", "AccentText", "Sun", "SunText", "Ok", "OkSoft", "Edge", "EdgeSoft", "Over", "OverSoft"]
         for name in names {
             #expect(UIColor(named: name, in: .main, compatibleWith: nil) != nil, "Couleur manquante : \(name)")

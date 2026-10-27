@@ -3,28 +3,11 @@ import SwiftData
 import SwiftUI
 import WidgetKit
 
-enum RituelTab: CaseIterable, Identifiable {
+enum RituelTab: Hashable {
     case today, recap, habits
-
-    var id: Self { self }
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .today: "Aujourd'hui"
-        case .recap: "Récap"
-        case .habits: "Habitudes"
-        }
-    }
-
-    var symbol: String {
-        switch self {
-        case .today: "checkmark.circle"
-        case .recap: "chart.bar"
-        case .habits: "list.bullet"
-        }
-    }
 }
 
+/// Navigation native : trois onglets (barre en Liquid Glass sur iOS 26), chacun avec sa pile et son grand titre.
 struct RootView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
@@ -35,31 +18,26 @@ struct RootView: View {
     @State private var wasInBackground = false
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Group {
-                switch tab {
-                case .today:
-                    TodayView {
-                        startNewHabit = true
-                        tab = .habits
-                    }
-                case .recap: RecapView()
-                case .habits: HabitsView(startNew: $startNewHabit)
-                }
+        TabView(selection: $tab) {
+            TodayView {
+                startNewHabit = true
+                tab = .habits
             }
             .id(refreshID)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .tabItem { Label("Aujourd'hui", systemImage: "checkmark.circle") }
+            .tag(RituelTab.today)
 
-            FloatingTabBar(selection: $tab)
+            RecapView()
+                .id(refreshID)
+                .tabItem { Label("Récap", systemImage: "chart.bar") }
+                .tag(RituelTab.recap)
+
+            HabitsView(startNew: $startNewHabit)
+                .tabItem { Label("Habitudes", systemImage: "list.bullet") }
+                .tag(RituelTab.habits)
         }
-        .background {
-            ZStack {
-                Color.canvas.ignoresSafeArea()
-                // Halo pervenche en haut de l'écran, qui donne de la profondeur au fond.
-                RadialGradient(colors: [Color.accent.opacity(0.16), .clear], center: .top, startRadius: 0, endRadius: 420)
-                    .ignoresSafeArea()
-            }
-        }
+        .tint(.accent)
+        .sensoryFeedback(.selection, trigger: tab)
         .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange).receive(on: RunLoop.main)) { _ in
             // Des données sont arrivées d'un autre appareil : widgets et rappels suivent.
             HabitWriter(context: context).removeSyncDuplicates()
@@ -80,6 +58,7 @@ struct RootView: View {
         }
         .task {
             DefaultHabits.seedIfNeeded(in: context)
+            HealthImporter.migrateLegacySleepSetting(in: context)
             #if DEBUG
             applyDebugLaunchOptions()
             #endif
@@ -88,10 +67,10 @@ struct RootView: View {
         }
     }
 
-    /// Au lancement et au retour au premier plan : doublons de synchro, sommeil de la nuit, puis rappels des prochains jours.
+    /// Au lancement et au retour au premier plan : doublons de synchro, données Santé, puis rappels.
     private func refreshNativeData() async {
         HabitWriter(context: context).removeSyncDuplicates()
-        await SleepImporter.importLastNight(into: context)
+        await HealthImporter.importAll(into: context)
         await ReminderScheduler.sync()
     }
 

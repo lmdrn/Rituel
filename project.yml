@@ -79,7 +79,7 @@ targets:
           - Figtree-Regular.ttf
           - Figtree-SemiBold.ttf
           - Figtree-Bold.ttf
-        NSHealthShareUsageDescription: Rituel lit ton temps de sommeil pour remplir ton habitude Sommeil automatiquement.
+        NSHealthShareUsageDescription: Rituel lit ton sommeil, tes séances de sport, tes pas, l’eau bue et tes minutes de pleine conscience pour remplir tes habitudes automatiquement. Rien ne quitte ton iPhone.
         RituelAppGroup: $(APP_GROUP)
         RituelCloudKitContainer: $(ICLOUD_CONTAINER)
 

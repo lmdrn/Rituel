@@ -1,12 +1,16 @@
 import SwiftData
 import SwiftUI
 
-/// Onglet « Récap » : score d'équilibre, ce qui est tenu, en cours, à travailler, grille jour par jour.
+/// Onglet « Récap » : grande marguerite du score d'équilibre, ce qui est tenu, en cours, à travailler.
 struct RecapView: View {
     @State private var weekStart = RituelCalendar.current.monday(of: .now)
 
     var body: some View {
-        RecapContent(weekStart: $weekStart, today: RituelCalendar.current.day(.now))
+        NavigationStack {
+            RecapContent(weekStart: $weekStart, today: RituelCalendar.current.day(.now))
+                .navigationTitle("Récap")
+                .background(.canvas)
+        }
     }
 }
 
@@ -38,21 +42,25 @@ private struct RecapContent: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: Metrics.sectionSpacing) {
-                HeroCard(eyebrow: "Récap de la semaine", title: recap.title)
-
                 HStack {
-                    ChevronButton(direction: -1, label: "Semaine précédente") { moveWeek(-7) }
+                    Button { moveWeek(-7) } label: { Image(systemName: "chevron.left").frame(width: 44, height: 44) }
+                        .accessibilityLabel("Semaine précédente")
                     Spacer()
                     Text(verbatim: "Du \(calendar.shortDate(weekStart)) au \(calendar.shortDate(end))" + (end >= today ? " · en cours" : ""))
-                        .font(.rituelCallout)
+                        .font(.rituel(.semibold, size: 15, relativeTo: .subheadline))
                         .monospacedDigit()
                         .foregroundStyle(.ink2)
+                        .contentTransition(.numericText())
                     Spacer()
-                    ChevronButton(direction: 1, label: "Semaine suivante") { moveWeek(7) }
+                    Button { moveWeek(7) } label: { Image(systemName: "chevron.right").frame(width: 44, height: 44) }
                         .disabled(calendar.adding(days: 7, to: weekStart) > today)
+                        .accessibilityLabel("Semaine suivante")
                 }
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.accentText)
 
                 ScoreCard(recap: recap)
+                    .id(weekStart)
 
                 RecapSection(title: "Ce que tu as tenu", rows: recap.kept, empty: "Rien de tenu pour l'instant, et c'est ok.")
                 if !recap.inProgress.isEmpty {
@@ -74,9 +82,8 @@ private struct RecapContent: View {
                 }
             }
             .padding(.horizontal, Metrics.gutter)
-            .padding(.top, 16)
-            .padding(.bottom, 120)
-            .frame(maxWidth: 560)
+            .padding(.bottom, 24)
+            .frame(maxWidth: 600)
             .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
@@ -85,7 +92,8 @@ private struct RecapContent: View {
 
     private func moveWeek(_ days: Int) {
         let next = calendar.adding(days: days, to: weekStart)
-        if next <= today { weekStart = next }
+        guard next <= today else { return }
+        withAnimation(.snappy) { weekStart = next }
     }
 }
 
@@ -94,67 +102,65 @@ private struct RecapContent: View {
 private struct ScoreCard: View {
     let recap: WeekRecap
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var shown = 0.0
+
     var body: some View {
-        let total = recap.rows.count, kept = recap.kept.count
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .center, spacing: 18) {
-                HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    Text(verbatim: "\(recap.score)")
-                        .font(.rituelScore)
-                    Text(verbatim: "%")
-                        .font(.rituel(.title, size: 26, relativeTo: .title))
-                }
-                .monospacedDigit()
-                .foregroundStyle(.accentText)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Équilibre").eyebrow()
-                    Text(verbatim: "\(kept) sur \(total) \(HabitEngine.plural(Double(total), "habitude")) \(HabitEngine.plural(Double(kept), "tenue"))")
-                        .font(.rituelBodyStrong)
-                        .foregroundStyle(.ink)
-                    FlowLayout(spacing: 6) {
-                        if kept > 0 {
-                            StatusChip(status: HabitStatus(tone: .ok, label: "\(kept) \(HabitEngine.plural(Double(kept), "tenue"))"))
-                        }
-                        if !recap.inProgress.isEmpty {
-                            StatusChip(status: HabitStatus(tone: .progress, label: "\(recap.inProgress.count) en cours"))
-                        }
-                        if !recap.toWork.isEmpty {
-                            StatusChip(status: HabitStatus(tone: .over, label: "\(recap.toWork.count) à travailler"))
-                        }
-                    }
-                    .padding(.top, 4)
-                }
+        let score = recap.score
+        VStack(spacing: 16) {
+            Daisy(filled: Int((Double(score) / 100 * 7).rounded()), tint: .accent, heartLit: score >= 85, delay: 0.1)
+                .frame(width: 180, height: 180)
+                .padding(.top, 6)
+            VStack(spacing: 4) {
+                CountingPercent(value: shown)
+                    .font(.rituel(.title, size: 56, relativeTo: .largeTitle))
+                    .foregroundStyle(.accentText)
+                Text(verbatim: recap.title)
+                    .font(.rituel(.title, size: 20, relativeTo: .title3))
+                    .foregroundStyle(.ink)
+                    .multilineTextAlignment(.center)
             }
-
-            ScoreDots(score: recap.score)
+            Divider()
+            HStack(spacing: 0) {
+                stat(recap.kept.count, HabitEngine.plural(Double(recap.kept.count), "tenue"), .ok)
+                Divider().frame(height: 40)
+                stat(recap.inProgress.count, "en cours", .accentText)
+                Divider().frame(height: 40)
+                stat(recap.toWork.count, "à travailler", .over)
+            }
         }
-        .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .frame(maxWidth: .infinity)
         .cardStyle()
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: "Équilibre \(score) %. \(recap.title). \(recap.kept.count) tenues, \(recap.inProgress.count) en cours, \(recap.toWork.count) à travailler."))
+        .onAppear {
+            if reduceMotion { shown = Double(score); return }
+            withAnimation(.easeOut(duration: 1.1).delay(0.2)) { shown = Double(score) }
+        }
+    }
+
+    private func stat(_ n: Int, _ label: String, _ color: Color) -> some View {
+        VStack(spacing: 2) {
+            Text(verbatim: "\(n)")
+                .font(.rituel(.title, size: 28, relativeTo: .title))
+                .foregroundStyle(color)
+            Text(verbatim: label)
+                .font(.rituelCallout)
+                .foregroundStyle(.ink2)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
-/// 20 petits points : remplis selon le score, les derniers en jaune soleil.
-private struct ScoreDots: View {
-    let score: Int
+/// Pourcentage dont les chiffres défilent de 0 au score.
+private struct CountingPercent: View {
+    var value: Double
 
     var body: some View {
-        let on = Int((Double(score) / 5).rounded())
-        HStack(spacing: 3) {
-            ForEach(0..<20, id: \.self) { i in
-                Group {
-                    if i < on {
-                        Pebble(shape: Capsule(), base: i >= 14 ? .sun : .accent, lifted: false, glows: true)
-                    } else {
-                        Well(shape: Capsule())
-                    }
-                }
-                .frame(height: 10)
-            }
-        }
-        .accessibilityHidden(true)
+        (Text(verbatim: "\(Int(value.rounded()))") + Text(verbatim: " %").font(.rituel(.title, size: 26, relativeTo: .title)))
+            .monospacedDigit()
+            .contentTransition(.numericText(value: value))
     }
 }
 
@@ -172,18 +178,16 @@ private struct RecapSection: View {
                 .font(.rituelTitle)
                 .foregroundStyle(.ink)
                 .accessibilityAddTraits(.isHeader)
-
             VStack(spacing: 0) {
                 if rows.isEmpty, let empty {
                     Text(empty)
-                        .font(.rituel(.regular, size: 14, relativeTo: .subheadline))
-                        .foregroundStyle(.ink3)
+                        .font(.rituelBody)
+                        .foregroundStyle(.ink2)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 14)
-                        .padding(.horizontal, 16)
+                        .padding(16)
                 }
                 ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
-                    if index > 0 { Rectangle().fill(Color.line).frame(height: 1) }
+                    if index > 0 { Divider().padding(.leading, 58) }
                     RecapRowView(row: row, showTip: showTips)
                 }
             }
@@ -198,38 +202,32 @@ private struct RecapRowView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Daisy(filled: 7, tint: row.habit.color.color, heartLit: row.state == .kept)
-                .frame(width: 20, height: 20)
-                .padding(.top, 1)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(row.habit.name)
-                    .font(.rituelBodyStrong)
-                    .foregroundStyle(.ink)
+            HabitIcon(color: row.habit.color.color)
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(row.habit.name)
+                        .font(.rituel(.semibold, size: 17, relativeTo: .body))
+                        .foregroundStyle(.ink)
+                    Spacer()
+                    Text(verbatim: row.value)
+                        .font(.rituel(.regular, size: 15, relativeTo: .subheadline))
+                        .monospacedDigit()
+                        .foregroundStyle(.ink2)
+                }
                 Text(verbatim: row.detail)
-                    .font(.rituelCallout)
+                    .font(.rituel(.regular, size: 14, relativeTo: .subheadline))
                     .foregroundStyle(.ink2)
                     .fixedSize(horizontal: false, vertical: true)
                 if showTip, let tip = row.tip {
-                    Text(verbatim: tip)
-                        .font(.rituelCallout)
-                        .foregroundStyle(.ink)
+                    (Text("Conseil · ").fontWeight(.bold).foregroundStyle(.sunText) + Text(verbatim: tip).foregroundStyle(.ink))
+                        .font(.rituel(.regular, size: 14, relativeTo: .subheadline))
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 10)
-                        .background(.surface2, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                        .padding(.top, 6)
+                        .padding(.top, 4)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            Text(verbatim: row.value)
-                .font(.rituelCallout)
-                .monospacedDigit()
-                .foregroundStyle(.ink2)
-                .fixedSize()
         }
-        .padding(.vertical, 14)
         .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .accessibilityElement(children: .combine)
     }
 }
@@ -245,13 +243,13 @@ private struct HeatGrid: View {
     var body: some View {
         let cal = log.calendar
         let days = (0..<7).map { cal.adding(days: $0, to: weekStart) }
-        Grid(horizontalSpacing: 4, verticalSpacing: 4) {
+        Grid(horizontalSpacing: 5, verticalSpacing: 6) {
             GridRow {
                 Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
                 ForEach(0..<7, id: \.self) { i in
                     Text(verbatim: RituelCalendar.weekdayLetters[i])
-                        .font(.rituel(.semibold, size: 11, relativeTo: .caption2))
-                        .foregroundStyle(.ink3)
+                        .font(.rituel(.bold, size: 11, relativeTo: .caption2))
+                        .foregroundStyle(.ink2)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -263,46 +261,41 @@ private struct HeatGrid: View {
                         .font(.rituelCallout)
                         .foregroundStyle(.ink)
                         .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: 110, alignment: .leading)
+                        .frame(maxWidth: 96, alignment: .leading)
                         .gridColumnAlignment(.leading)
                     ForEach(days, id: \.self) { d in
                         let v = log.value(habit.id, on: d)
                         cell(RecapEngine.heatCell(habit, value: v, day: d, today: today),
-                             text: d > today || v == 0 ? "" : QuantityFormat.value(v, for: habit, short: true),
-                             tint: habit.color.color)
+                             text: d > today || v == 0 ? "" : QuantityFormat.value(v, for: habit, short: true))
                     }
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text(verbatim: summary(habit, days: days)))
             }
         }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 16)
+        .padding(16)
         .cardStyle()
     }
 
-    private func cell(_ state: HeatCellState, text: String, tint: Color) -> some View {
+    private func cell(_ state: HeatCellState, text: String) -> some View {
         let shape = RoundedRectangle(cornerRadius: 7, style: .continuous)
         let (fg, bg): (Color, Color) = switch state {
         case .ok: (.ok, .okSoft)
         case .over: (.over, .overSoft)
-        case .hit: (.ink, tint.opacity(0.45))
-        case .empty: (.ink2, .surface2)
+        case .hit: (.ink, .accentSoft)
+        case .empty: (.ink2, .canvas)
         case .future: (.ink3, .clear)
         }
         return Text(verbatim: text)
-            .font(.rituel(.semibold, size: 10, relativeTo: .caption2))
+            .font(.rituel(.bold, size: 10, relativeTo: .caption2))
             .monospacedDigit()
             .lineLimit(1)
             .minimumScaleFactor(0.6)
             .foregroundStyle(fg)
             .frame(maxWidth: .infinity, minHeight: 26)
-            .background { if state != .future { Well(shape: shape, color: bg) } }
+            .background(bg, in: shape)
             .overlay {
-                if state == .future {
-                    shape.strokeBorder(Color.line, style: StrokeStyle(lineWidth: 1, dash: [3, 2]))
-                }
+                if state == .future { shape.strokeBorder(Color.line, style: StrokeStyle(lineWidth: 1, dash: [3, 2])) }
             }
     }
 
@@ -311,8 +304,7 @@ private struct HeatGrid: View {
         let parts = days.filter { $0 <= today }.compactMap { d -> String? in
             let v = log.value(habit.id, on: d)
             guard v > 0 else { return nil }
-            let weekday = cal.longDate(d).components(separatedBy: " ").first ?? ""
-            return "\(weekday) \(QuantityFormat.value(v, for: habit))"
+            return "\(cal.longDate(d).components(separatedBy: " ").first ?? "") \(QuantityFormat.value(v, for: habit))"
         }
         return "\(habit.name) : " + (parts.isEmpty ? "rien de noté" : parts.joined(separator: ", "))
     }
@@ -329,22 +321,31 @@ private struct WeeklyNoteCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Un mot pour ta semaine").eyebrow()
+            Text("Un mot pour ta semaine")
+                .font(.rituelCardTitle)
+                .foregroundStyle(.ink)
             if let note {
                 Text(verbatim: note)
                     .font(.rituelNote)
                     .lineSpacing(5)
                     .foregroundStyle(.ink)
                     .fixedSize(horizontal: false, vertical: true)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
                 Text(failed ? "Le mot n'a pas pu s'écrire cette fois. Tu peux réessayer." : "Quelques lignes bienveillantes écrites à partir de ton récap, directement sur ton iPhone.")
-                    .font(.rituel(.regular, size: 14, relativeTo: .subheadline))
+                    .font(.rituelBody)
                     .foregroundStyle(.ink2)
             }
-            Button(writing ? "Écriture…" : (note == nil ? "Écrire mon mot" : "Un autre mot")) {
+            Button {
                 Task { await write() }
+            } label: {
+                if writing {
+                    ProgressView().frame(maxWidth: .infinity)
+                } else {
+                    Text(note == nil ? "Écrire mon mot" : "Un autre mot").frame(maxWidth: .infinity)
+                }
             }
-            .buttonStyle(PillButtonStyle(kind: .soft))
+            .buttonStyle(CapsuleButtonStyle(prominent: false))
             .disabled(writing)
         }
         .padding(16)
@@ -356,7 +357,8 @@ private struct WeeklyNoteCard: View {
         writing = true
         defer { writing = false }
         do {
-            note = try await WeeklyNoteWriter.write(prompt: prompt)
+            let text = try await WeeklyNoteWriter.write(prompt: prompt)
+            withAnimation(.easeOut(duration: 0.4)) { note = text }
             failed = false
         } catch {
             failed = true
@@ -366,13 +368,5 @@ private struct WeeklyNoteCard: View {
 
 #Preview("Récap") {
     RecapView()
-        .background(.canvas)
         .modelContainer(PreviewData.container)
-}
-
-#Preview("Sombre") {
-    RecapView()
-        .background(.canvas)
-        .modelContainer(PreviewData.container)
-        .preferredColorScheme(.dark)
 }

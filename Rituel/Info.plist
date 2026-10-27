@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Rituel lit ton temps de sommeil pour remplir ton habitude Sommeil automatiquement.</string>
+	<string>Rituel lit ton sommeil, tes séances de sport, tes pas, l’eau bue et tes minutes de pleine conscience pour remplir tes habitudes automatiquement. Rien ne quitte ton iPhone.</string>
 	<key>RituelAppGroup</key>
 	<string>$(APP_GROUP)</string>
 	<key>RituelCloudKitContainer</key>

@@ -103,6 +103,28 @@ struct HabitDraft: Identifiable, Sendable {
     var canIncrement: Bool { spec.target < Self.maxCountTarget }
 
     mutating func setPeriod(_ period: HabitPeriod) { spec.period = period }
+
+    // MARK: Santé et modèles
+
+    /// Sources Santé qui correspondent à ce que mesure l'habitude.
+    var compatibleHealthSources: [HealthSource] { HealthSource.allCases.filter { $0.fits(spec) } }
+
+    mutating func setHealthSource(_ source: HealthSource?) {
+        spec.healthSource = source
+        if let source { spec.entryMode = source.entryMode }
+    }
+
+    mutating func setHealthMinMinutes(_ minutes: Int) { spec.healthMinMinutes = max(0, min(240, minutes)) }
+    mutating func setHealthWorkoutKind(_ kind: WorkoutKind?) { spec.healthWorkoutKind = kind }
+
+    /// Part d'un modèle (« 10 000 pas par jour ») en gardant l'identité et la place de la nouvelle habitude.
+    mutating func apply(template: HabitSpec) {
+        let id = spec.id, index = spec.sortIndex
+        spec = template
+        spec.id = id
+        spec.sortIndex = index
+        presetsText = Self.text(for: template.presets)
+    }
     mutating func setColor(_ color: HabitColor) { spec.colorKey = color.rawValue }
     mutating func setReminder(minutes: Int?) { spec.reminderMinutes = minutes }
 
@@ -127,6 +149,12 @@ struct HabitDraft: Identifiable, Sendable {
             s.entryMode = .set
             s.presets = []
             s.target = s.target.rounded()
+        }
+        // Une source Santé qui ne correspond plus à la mesure (après un changement d'unité) est retirée.
+        if let source = s.healthSource, !source.fits(s) { s.healthSource = nil }
+        if s.healthSource != .workouts {
+            s.healthMinMinutes = 0
+            s.healthWorkoutKind = nil
         }
         return s
     }

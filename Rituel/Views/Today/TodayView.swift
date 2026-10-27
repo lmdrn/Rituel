@@ -2,7 +2,7 @@ import Combine
 import SwiftData
 import SwiftUI
 
-/// Onglet « Aujourd'hui » : salutation, frise de la semaine, cartes groupées par période.
+/// Onglet « Aujourd'hui » : salutation, frise de la semaine, résumé, cartes groupées par période.
 struct TodayView: View {
     var onCreateHabit: () -> Void = {}
 
@@ -11,13 +11,17 @@ struct TodayView: View {
     @State private var selected = RituelCalendar.current.day(.now)
 
     var body: some View {
-        TodayContent(selected: $selected, today: today, onCreateHabit: onCreateHabit)
-            .onChange(of: scenePhase) { _, phase in
-                if phase == .active { refreshDay() }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged).receive(on: RunLoop.main)) { _ in
-                refreshDay()
-            }
+        NavigationStack {
+            TodayContent(selected: $selected, today: today, onCreateHabit: onCreateHabit)
+                .navigationTitle("Aujourd'hui")
+                .background(.canvas)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { refreshDay() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged).receive(on: RunLoop.main)) { _ in
+            refreshDay()
+        }
     }
 
     /// Passe au jour suivant si l'app reste ouverte après minuit.
@@ -45,11 +49,11 @@ private struct TodayContent: View {
         _selected = selected
         self.today = today
         self.onCreateHabit = onCreateHabit
-        // Seules les entrées utiles à l'écran : la semaine et le mois du jour sélectionné.
+        // La semaine et le mois du jour choisi, plus 30 jours pour la valeur habituelle des choix rapides.
         let cal = RituelCalendar.current
         let week = cal.range(.week, containing: selected.wrappedValue)
         let month = cal.range(.month, containing: selected.wrappedValue)
-        let start = min(week.first, month.first)
+        let start = min(week.first, month.first, cal.adding(days: -WidgetData.recentDays, to: selected.wrappedValue))
         let end = cal.adding(days: 1, to: max(week.last, month.last))
         _entries = Query(filter: #Predicate<Entry> { $0.day >= start && $0.day < end })
     }
@@ -60,49 +64,51 @@ private struct TodayContent: View {
         let over = HabitEngine.overLimitCount(specs, log: log, day: selected)
 
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: Metrics.sectionSpacing, pinnedViews: [.sectionHeaders]) {
-                TodayHero(
-                    date: today,
-                    greeting: HabitEngine.greeting(name: firstName, hour: calendar.hour(.now)),
-                    lede: HabitEngine.lede(overLimits: over, habitCount: specs.count)
-                )
-                .padding(.horizontal, Metrics.gutter)
+            VStack(alignment: .leading, spacing: Metrics.sectionSpacing) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(verbatim: calendar.longDate(today))
+                        .font(.rituel(.bold, size: 13, relativeTo: .footnote))
+                        .textCase(.uppercase)
+                        .foregroundStyle(.ink2)
+                    Text(verbatim: "\(HabitEngine.greeting(name: firstName, hour: calendar.hour(.now))). \(HabitEngine.lede(overLimits: over, habitCount: specs.count))")
+                        .font(.rituelBody)
+                        .foregroundStyle(.ink2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
 
-                Section {
+                WeekDaisyStrip(selected: $selected, today: today, habits: specs, log: log)
+
+                if specs.isEmpty {
+                    emptyState
+                } else {
+                    SummaryCard(habits: specs, log: log, selected: selected, today: today)
                     ForEach(HabitPeriod.allCases, id: \.self) { period in
                         let group = specs.filter { $0.period == period }
                         if !group.isEmpty {
-                            PeriodGroup(period: period, habits: group, log: log, selected: selected, today: today, onAction: write)
-                                .padding(.horizontal, Metrics.gutter)
+                            PeriodSection(period: period, habits: group, log: log, selected: selected, today: today, onAction: write)
                         }
                     }
-                    if specs.isEmpty {
-                        VStack(alignment: .leading, spacing: 14) {
-                            Text("Aucune habitude pour l'instant.")
-                                .font(.rituelBody)
-                                .foregroundStyle(.ink)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.vertical, 14)
-                                .padding(.horizontal, 16)
-                                .background(.accentSoft, in: RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous))
-                            Button("Créer une habitude", action: onCreateHabit)
-                                .buttonStyle(PillButtonStyle(kind: .primary))
-                        }
-                        .padding(.horizontal, Metrics.gutter)
-                    }
-                } header: {
-                    WeekStrip(selected: $selected, today: today, log: log)
-                        .padding(.horizontal, Metrics.gutter)
-                        .padding(.vertical, 8)
-                        .background { PinnedBackground() }
                 }
             }
-            .padding(.top, 16)
-            .padding(.bottom, 120)
-            .frame(maxWidth: 560)
+            .padding(.horizontal, Metrics.gutter)
+            .padding(.bottom, 24)
+            .frame(maxWidth: 600)
             .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
+    }
+
+    private var emptyState: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Aucune habitude pour l'instant.")
+                .font(.rituelBody)
+                .foregroundStyle(.ink)
+            Button("Créer une habitude", action: onCreateHabit)
+                .buttonStyle(CapsuleButtonStyle())
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardStyle()
     }
 
     private func write(_ action: EntryAction, _ habit: HabitSpec) {
@@ -110,30 +116,7 @@ private struct TodayContent: View {
     }
 }
 
-/// Fond de la frise : transparent au repos pour laisser voir les vagues, opaque une fois collée en haut
-/// (il remonte alors sous la barre d'état pour que les cartes n'y passent pas).
-private struct PinnedBackground: View {
-    var body: some View {
-        GeometryReader { geo in
-            let top = geo.frame(in: .scrollView).minY
-            Color.canvas
-                .padding(.top, -120)
-                .opacity(min(1, max(0, 1 - top / 40)))
-        }
-    }
-}
-
-private struct TodayHero: View {
-    let date: Date
-    let greeting: String
-    let lede: String
-
-    var body: some View {
-        HeroCard(date: date, eyebrow: RituelCalendar.current.longDate(date), title: greeting, subtitle: lede)
-    }
-}
-
-private struct PeriodGroup: View {
+private struct PeriodSection: View {
     let period: HabitPeriod
     let habits: [HabitSpec]
     let log: EntryLog
@@ -160,18 +143,18 @@ private struct PeriodGroup: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
                 Text(title)
                     .font(.rituelTitle)
                     .foregroundStyle(.ink)
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
-                Text(subtitle)
+                Text(verbatim: subtitle)
                     .font(.rituelCallout)
-                    .foregroundStyle(.ink3)
+                    .foregroundStyle(.ink2)
             }
             ForEach(habits) { habit in
-                HabitCard(habit: habit, log: log, selected: selected, today: today) { onAction($0, habit) }
+                HabitTile(habit: habit, log: log, selected: selected, today: today) { onAction($0, habit) }
             }
         }
     }
@@ -179,13 +162,11 @@ private struct PeriodGroup: View {
 
 #Preview("Aujourd'hui") {
     TodayView()
-        .background(.canvas)
         .modelContainer(PreviewData.container)
 }
 
 #Preview("Sombre, grand texte") {
     TodayView()
-        .background(.canvas)
         .modelContainer(PreviewData.container)
         .preferredColorScheme(.dark)
         .dynamicTypeSize(.xxLarge)

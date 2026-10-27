@@ -39,6 +39,15 @@ struct HabitWriter {
         commit()
     }
 
+    /// Habitudes du résumé, dans l'ordre (3 au plus) ; les autres en sortent.
+    func setSummary(_ orderedIDs: [UUID]) {
+        let ranks = Dictionary(uniqueKeysWithValues: orderedIDs.prefix(SummaryEngine.maxFeatured).enumerated().map { ($1, $0) })
+        for habit in allHabits() where habit.summaryRank != ranks[habit.id] {
+            habit.summaryRank = ranks[habit.id]
+        }
+        commit()
+    }
+
     /// Applique un nouvel ordre (identifiants dans l'ordre voulu).
     func reorder(_ orderedIDs: [UUID]) {
         let byID = Dictionary(allHabits().map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })

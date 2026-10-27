@@ -1,231 +1,200 @@
 import SwiftUI
 
-/// Feuille de création / édition d'une habitude.
+/// Feuille de création / édition d'une habitude, en Form native.
 struct HabitEditorSheet: View {
     @State private var draft: HabitDraft
     let onSave: (HabitSpec) -> Void
     let onDelete: (UUID) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var focus: Field?
+    @FocusState private var nameFocused: Bool
     @State private var confirmDelete = false
-    @State private var nameHint = false
-
-    private enum Field: Hashable { case name, unit, target, presets }
+    @State private var targetText = ""
 
     init(draft: HabitDraft, onSave: @escaping (HabitSpec) -> Void, onDelete: @escaping (UUID) -> Void) {
         _draft = State(initialValue: draft)
+        _targetText = State(initialValue: draft.targetText)
         self.onSave = onSave
         self.onDelete = onDelete
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text(draft.isNew ? "Nouvelle habitude" : "Modifier")
-                    .font(.rituelTitle)
-                    .foregroundStyle(.ink)
-                    .accessibilityAddTraits(.isHeader)
+        NavigationStack {
+            Form {
+                if draft.isNew {
+                    Section("Modèles") {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(HabitSpec.templates, id: \.name) { template in
+                                    Button {
+                                        withAnimation { draft.apply(template: template) }
+                                        targetText = draft.targetText
+                                    } label: {
+                                        Label { Text(verbatim: HabitEngine.previewText(template).replacingOccurrences(of: ".", with: "")) } icon: {
+                                            HabitIcon(color: template.color.color, size: 22)
+                                        }
+                                        .font(.rituel(.semibold, size: 14, relativeTo: .subheadline))
+                                    }
+                                    .buttonStyle(CapsuleButtonStyle(prominent: false))
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        .listRowInsets(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+                    }
+                }
 
-                FormField(label: "Nom") {
-                    TextField(nameHint ? "Donne-lui un nom" : "Café froid, sport, méditation…",
-                              text: Binding(get: { draft.spec.name }, set: { draft.setName($0) }))
-                        .focused($focus, equals: .name)
+                Section {
+                    TextField("Café froid, sport, méditation…", text: Binding(get: { draft.spec.name }, set: { draft.setName($0) }))
+                        .focused($nameFocused)
                         .submitLabel(.done)
-                        .rituelField(focused: focus == .name)
-                }
-
-                FormField(label: "Type") {
-                    ChoiceSegment(options: [
-                        .init(value: HabitKind.limit, title: "Limite", subtitle: "pas plus de"),
-                        .init(value: HabitKind.goal, title: "Objectif", subtitle: "au moins"),
-                    ], selection: Binding(get: { draft.spec.kind }, set: { draft.setKind($0) }))
-                }
-
-                FormField(label: "Je suis") {
-                    ChoiceSegment(options: [
-                        .init(value: HabitMeasure.count, title: "Des fois", subtitle: "je coche"),
-                        .init(value: HabitMeasure.amount, title: "Une quantité", subtitle: "heures, ml, min…"),
-                    ], selection: Binding(get: { draft.spec.measure }, set: { draft.setMeasure($0) }))
-                }
-
-                if draft.spec.isAmount { amountFields } else { countField }
-
-                FormField(label: "Par") {
-                    ChoiceSegment(options: [
-                        .init(value: HabitPeriod.day, title: "Jour"),
-                        .init(value: HabitPeriod.week, title: "Semaine"),
-                        .init(value: HabitPeriod.month, title: "Mois"),
-                    ], selection: Binding(get: { draft.spec.period }, set: { draft.setPeriod($0) }))
-                }
-
-                FormField(label: "Couleur") {
-                    ColorGrid(selection: Binding(get: { draft.spec.color }, set: { draft.setColor($0) }))
-                }
-
-                reminderField
-
-                Text(verbatim: draft.previewText)
-                    .font(.rituelBrand)
-                    .foregroundStyle(.ink)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 14)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 16)
-                    .background(alignment: .leading) {
-                        UnevenRoundedRectangle(topLeadingRadius: 16, bottomLeadingRadius: 16, style: .continuous)
-                            .fill(draft.spec.color.color)
-                            .frame(width: 6)
+                    Picker("Type", selection: Binding(get: { draft.spec.kind }, set: { draft.setKind($0) })) {
+                        Text("Limite").tag(HabitKind.limit)
+                        Text("Objectif").tag(HabitKind.goal)
                     }
-                    .raisedSurface(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .accessibilityLabel(Text(verbatim: "Aperçu : \(draft.previewText)"))
+                    .pickerStyle(.segmented)
+                } header: {
+                    Text("Nom")
+                } footer: {
+                    Text(draft.spec.kind == .limit ? "Une limite : pas plus de… Pour ce que tu veux réduire." : "Un objectif : au moins… Pour ce que tu veux cultiver.")
+                }
 
-                actions
+                Section("Mesure") {
+                    Picker("Je note", selection: Binding(get: { draft.spec.measure }, set: { draft.setMeasure($0); targetText = draft.targetText })) {
+                        Text("Des fois").tag(HabitMeasure.count)
+                        Text("Une quantité").tag(HabitMeasure.amount)
+                    }
+                    .pickerStyle(.segmented)
+
+                    if draft.spec.isAmount {
+                        LabeledContent("Unité") {
+                            TextField("h, ml, min, pas", text: Binding(get: { draft.spec.unit ?? "" }, set: { draft.setUnit($0) }))
+                                .multilineTextAlignment(.trailing)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                        }
+                        Picker("Comment je note", selection: Binding(get: { draft.spec.entryMode }, set: { draft.setEntryMode($0) })) {
+                            Text("Valeur du jour").tag(EntryMode.set)
+                            Text("J'additionne").tag(EntryMode.add)
+                        }
+                        LabeledContent("Combien") {
+                            TextField("8", text: $targetText)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .monospacedDigit()
+                                .onChange(of: targetText) { _, text in draft.setTargetText(text) }
+                        }
+                        LabeledContent("Choix rapides") {
+                            TextField("6  6.5  7", text: Binding(get: { draft.presetsText }, set: { draft.setPresetsText($0) }))
+                                .keyboardType(.numbersAndPunctuation)
+                                .multilineTextAlignment(.trailing)
+                                .monospacedDigit()
+                        }
+                    } else {
+                        Stepper(value: Binding(get: { Int(draft.spec.target) }, set: { draft.stepTarget(by: $0 - Int(draft.spec.target)) }),
+                                in: (draft.spec.kind == .goal ? 1 : 0)...Int(HabitDraft.maxCountTarget)) {
+                            LabeledContent("Combien", value: QuantityFormat.number(draft.spec.target))
+                        }
+                    }
+                    Picker("Par", selection: Binding(get: { draft.spec.period }, set: { draft.setPeriod($0) })) {
+                        Text("Jour").tag(HabitPeriod.day)
+                        Text("Semaine").tag(HabitPeriod.week)
+                        Text("Mois").tag(HabitPeriod.month)
+                    }
+                }
+
+                healthSection
+
+                Section("Couleur") {
+                    ColorChoice(selection: Binding(get: { draft.spec.color }, set: { draft.setColor($0) }))
+                }
+
+                Section("Rappel") {
+                    Toggle("Me le rappeler chaque jour", isOn: Binding(
+                        get: { draft.spec.reminderMinutes != nil },
+                        set: { draft.setReminder(minutes: $0 ? (draft.spec.reminderMinutes ?? 20 * 60) : nil) }
+                    ))
+                    if let minutes = draft.spec.reminderMinutes {
+                        DatePicker("Heure", selection: Binding(
+                            get: { Self.date(fromMinutes: minutes) },
+                            set: { draft.setReminder(minutes: Self.minutes(from: $0)) }
+                        ), displayedComponents: .hourAndMinute)
+                    }
+                }
+
+                Section {
+                    HStack(spacing: 12) {
+                        Daisy(filled: 7, tint: draft.spec.color.color, heartLit: true, blooms: false)
+                            .frame(width: 28, height: 28)
+                        Text(verbatim: draft.previewText)
+                            .font(.rituel(.titleMedium, size: 17, relativeTo: .body))
+                            .contentTransition(.opacity)
+                    }
+                    .accessibilityElement(children: .combine)
+                } header: {
+                    Text("Aperçu")
+                }
+
+                if !draft.isNew {
+                    Section {
+                        Button("Supprimer l'habitude", role: .destructive) { confirmDelete = true }
+                    }
+                }
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 24)
-            .padding(.bottom, 22)
-            .animation(.easeOut(duration: 0.2), value: draft.spec.measure)
+            .scrollDismissesKeyboard(.interactively)
+            .navigationTitle(draft.isNew ? "Nouvelle habitude" : "Modifier")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Annuler") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Enregistrer") {
+                        if let spec = draft.finalized() {
+                            onSave(spec)
+                            dismiss()
+                        } else if draft.problem == .missingName {
+                            nameFocused = true
+                        }
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(draft.problem != nil)
+                }
+            }
+            .confirmationDialog("Supprimer « \(draft.spec.name) » et tout son historique ?", isPresented: $confirmDelete, titleVisibility: .visible) {
+                Button("Supprimer", role: .destructive) {
+                    onDelete(draft.id)
+                    dismiss()
+                }
+            }
+            .onAppear { if draft.isNew { nameFocused = true } }
         }
-        .scrollDismissesKeyboard(.interactively)
-        .background(.canvas)
         .presentationDragIndicator(.visible)
-        .presentationBackground(.canvas)
-        .presentationCornerRadius(26)
-        .onAppear { if draft.isNew { focus = .name } }
+        .tint(.accent)
     }
 
-    // MARK: Champs
-
-    private var countField: some View {
-        FormField(label: "Combien") {
-            CountStepper(value: QuantityFormat.number(draft.spec.target),
-                         canDecrement: draft.canDecrement, canIncrement: draft.canIncrement) { draft.stepTarget(by: $0) }
-        }
-    }
+    // MARK: Santé
 
     @ViewBuilder
-    private var amountFields: some View {
-        FormField(label: "Unité") {
-            TextField("h, ml, min, km", text: Binding(get: { draft.spec.unit ?? "" }, set: { draft.setUnit($0) }))
-                .focused($focus, equals: .unit)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .rituelField(focused: focus == .unit)
-        }
-        FormField(label: "Comment je note") {
-            ChoiceSegment(options: [
-                .init(value: EntryMode.set, title: "Valeur du jour", subtitle: "ex. sommeil"),
-                .init(value: EntryMode.add, title: "J'additionne", subtitle: "ex. eau"),
-            ], selection: Binding(get: { draft.spec.entryMode }, set: { draft.setEntryMode($0) }))
-        }
-        FormField(label: "Combien") {
-            DecimalField(value: draft.spec.target, onChange: { draft.setTargetText($0) })
-                .focused($focus, equals: .target)
-                .rituelField(focused: focus == .target)
-        }
-        FormField(label: "Choix rapides") {
-            TextField("6  6.5  7  7.5  8  9", text: Binding(get: { draft.presetsText }, set: { draft.setPresetsText($0) }))
-                .focused($focus, equals: .presets)
-                .keyboardType(.numbersAndPunctuation)
-                .monospacedDigit()
-                .rituelField(focused: focus == .presets)
-            Text("Séparés par des espaces. Pour les heures, 7.5 = 7h30.")
-                .font(.rituel(.regular, size: 12, relativeTo: .caption))
-                .foregroundStyle(.ink3)
-        }
-    }
-
-    private var reminderField: some View {
-        FormField(label: "Rappel") {
-            VStack(alignment: .leading, spacing: 10) {
-                Toggle(isOn: Binding(
-                    get: { draft.spec.reminderMinutes != nil },
-                    set: { draft.setReminder(minutes: $0 ? (draft.spec.reminderMinutes ?? 20 * 60) : nil) }
-                )) {
-                    Text("Me le rappeler chaque jour")
-                        .font(.rituelBody)
-                        .foregroundStyle(.ink)
+    private var healthSection: some View {
+        let sources = draft.compatibleHealthSources
+        if !sources.isEmpty {
+            Section {
+                Picker("Remplir depuis Santé", selection: Binding(get: { draft.spec.healthSource }, set: { draft.setHealthSource($0) })) {
+                    Text("Non, je note à la main").tag(HealthSource?.none)
+                    ForEach(sources) { Text(verbatim: $0.title).tag(HealthSource?.some($0)) }
                 }
-                .tint(.accent)
-
-                if let minutes = draft.spec.reminderMinutes {
-                    DatePicker("Heure", selection: Binding(
-                        get: { Self.date(fromMinutes: minutes) },
-                        set: { draft.setReminder(minutes: Self.minutes(from: $0)) }
-                    ), displayedComponents: .hourAndMinute)
-                    .font(.rituelBody)
-                    .foregroundStyle(.ink)
-                    .tint(.accentText)
-                    .environment(\.locale, .rituel)
-                }
-            }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 14)
-            .background(.surface, in: RoundedRectangle(cornerRadius: Metrics.fieldRadius, style: .continuous))
-        }
-    }
-
-    // MARK: Actions
-
-    private var actions: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 10) {
-                deleteControls
-                Spacer(minLength: 0)
-                saveControls
-            }
-            VStack(alignment: .leading, spacing: 12) {
-                saveControls
-                deleteControls
-            }
-        }
-        .padding(.top, 4)
-    }
-
-    @ViewBuilder
-    private var deleteControls: some View {
-        if !draft.isNew {
-            if confirmDelete {
-                HStack(spacing: 8) {
-                    Text("Supprimer pour de bon ?")
-                        .font(.rituelCallout)
-                        .foregroundStyle(.over)
-                    Button("Oui, supprimer") {
-                        onDelete(draft.id)
-                        dismiss()
+                if draft.spec.healthSource == .workouts {
+                    Picker("Type de séance", selection: Binding(get: { draft.spec.healthWorkoutKind }, set: { draft.setHealthWorkoutKind($0) })) {
+                        Text("Toutes").tag(WorkoutKind?.none)
+                        ForEach(WorkoutKind.allCases) { Text(verbatim: $0.title).tag(WorkoutKind?.some($0)) }
                     }
-                    .buttonStyle(PillButtonStyle(kind: .ghost))
-                    Button("Non") { confirmDelete = false }
-                        .buttonStyle(PillButtonStyle(kind: .soft))
+                    Stepper(value: Binding(get: { draft.spec.healthMinMinutes }, set: { draft.setHealthMinMinutes($0) }), in: 0...240, step: 5) {
+                        LabeledContent("Durée minimale", value: draft.spec.healthMinMinutes == 0 ? "aucune" : "\(draft.spec.healthMinMinutes) min")
+                    }
                 }
-            } else {
-                Button("Supprimer") { confirmDelete = true }
-                    .buttonStyle(PillButtonStyle(kind: .ghost))
-            }
-        }
-    }
-
-    private var saveControls: some View {
-        HStack(spacing: 8) {
-            Button("Annuler") { dismiss() }
-                .buttonStyle(PillButtonStyle(kind: .soft))
-            Button("Enregistrer", action: save)
-                .buttonStyle(PillButtonStyle(kind: .primary))
-        }
-    }
-
-    private func save() {
-        switch draft.problem {
-        case .missingName:
-            nameHint = true
-            focus = .name
-        case .missingTarget:
-            focus = .target
-        case nil:
-            if let spec = draft.finalized() {
-                onSave(spec)
-                dismiss()
+            } header: {
+                Text("Santé")
+            } footer: {
+                Text("Garmin Connect, Strava et l'Apple Watch peuvent envoyer leurs données dans Santé ; Rituel les lit de là. Ta saisie à la main reste toujours prioritaire.")
             }
         }
     }
@@ -240,30 +209,36 @@ struct HabitEditorSheet: View {
     }
 }
 
-/// Champ décimal qui garde la saisie telle quelle (« 1, » en cours de frappe) et accepte la virgule.
-private struct DecimalField: View {
-    let value: Double
-    let onChange: (String) -> Void
-    @State private var text = ""
+/// Les 16 teintes de la palette, en pastilles.
+private struct ColorChoice: View {
+    @Binding var selection: HabitColor
 
     var body: some View {
-        TextField("8", text: $text)
-            .keyboardType(.decimalPad)
-            .monospacedDigit()
-            .onAppear { text = QuantityFormat.number(value) }
-            .onChange(of: text) { _, new in onChange(new) }
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 8), spacing: 10) {
+            ForEach(HabitColor.allCases) { color in
+                let on = color == selection
+                Button {
+                    withAnimation(.snappy) { selection = color }
+                } label: {
+                    Circle()
+                        .fill(color.color)
+                        .padding(on ? 4 : 0)
+                        .overlay { if on { Circle().strokeBorder(Color.ink, lineWidth: 2) } }
+                        .aspectRatio(1, contentMode: .fit)
+                        .frame(minWidth: 28)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(verbatim: color.name))
+                .accessibilityAddTraits(on ? .isSelected : [])
+            }
+        }
+        .padding(.vertical, 4)
+        .sensoryFeedback(.selection, trigger: selection)
     }
 }
 
 #Preview("Nouvelle") {
-    Color.canvas.sheet(isPresented: .constant(true)) {
+    Color.clear.sheet(isPresented: .constant(true)) {
         HabitEditorSheet(draft: HabitDraft(newWithSortIndex: 6), onSave: { _ in }, onDelete: { _ in })
     }
-}
-
-#Preview("Sommeil, sombre") {
-    Color.canvas.sheet(isPresented: .constant(true)) {
-        HabitEditorSheet(draft: HabitDraft(editing: DefaultHabits.specs[0]), onSave: { _ in }, onDelete: { _ in })
-    }
-    .preferredColorScheme(.dark)
 }

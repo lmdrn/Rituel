@@ -6,15 +6,15 @@ enum DefaultHabits {
     // on pourra reconnaître les doublons.
     static let specs: [HabitSpec] = [
         HabitSpec(id: uuid(1), name: "Sommeil", kind: .goal, target: 8, period: .day, colorKey: HabitColor.lilas.rawValue,
-                  measure: .amount, unit: "h", entryMode: .set, presets: [6, 6.5, 7, 7.5, 8, 9], sortIndex: 0),
+                  measure: .amount, unit: "h", entryMode: .set, presets: [6, 6.5, 7, 7.5, 8, 9], sortIndex: 0, summaryRank: 0),
         HabitSpec(id: uuid(2), name: "Eau", kind: .goal, target: 2000, period: .day, colorKey: HabitColor.ciel.rawValue,
-                  measure: .amount, unit: "ml", entryMode: .add, presets: [250, 500, 1000], sortIndex: 1),
+                  measure: .amount, unit: "ml", entryMode: .add, presets: [250, 500, 1000], sortIndex: 1, summaryRank: 1),
         HabitSpec(id: uuid(3), name: "Café froid", kind: .limit, target: 1, period: .day, colorKey: HabitColor.bleu.rawValue,
                   sortIndex: 2),
         HabitSpec(id: uuid(4), name: "Croissant", kind: .limit, target: 1, period: .week, colorKey: HabitColor.mandarine.rawValue,
                   sortIndex: 3),
         HabitSpec(id: uuid(5), name: "Sport", kind: .goal, target: 3, period: .week, colorKey: HabitColor.menthe.rawValue,
-                  sortIndex: 4),
+                  sortIndex: 4, summaryRank: 2),
         HabitSpec(id: uuid(6), name: "Fast-food", kind: .limit, target: 1, period: .month, colorKey: HabitColor.violet.rawValue,
                   sortIndex: 5),
     ]

@@ -118,3 +118,38 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **La fleur est le bouton rond** pour les comptages (un tap = +1), avec en plus un bouton « +1 » plein et « −1 » quand le jour en a. Pour les quantités, la fleur montre la progression et les choix rapides sont des capsules pervenche.
 - **« Objectif atteint »** est maintenant en doré (`sunText` sur `edgeSoft`), comme le cœur qui s'allume. Le vert reste pour une limite respectée.
 - **En-tête** : la grande marguerite qui respire et tourne remplace la forme organique du brief. Elle garde son rôle (une forme qui respire derrière le titre, 9 s, coupée par Réduire les animations).
+
+## Présentation native (27 octobre 2026, maquette validée par Léa)
+
+- **Pourquoi** : Léa trouvait les cartes et la carte score « trop façon IA » : pastilles partout, rangée de 6 boutons, 20 points flous. Elle a voulu une présentation digne d'une app iOS, inspirée de **Forme**, tout en gardant la marguerite et les couleurs du logo. La maquette validée est https://claude.ai/artifact/7ZWDU62BULgbLEVrh82KLk.
+- **Ses choix** :
+  - `TabView` native et grands titres ;
+  - frise de mini-marguerites ;
+  - carte Résumé (3 habitudes choisies) ;
+  - cartes avec grand chiffre, statut en texte et graphique Swift Charts ;
+  - un bouton principal et un menu « ⋯ » pour les quantités ;
+  - grande marguerite pour le score ;
+  - `List` et `Form` natives ;
+  - fond groupé iOS ;
+  - animation subtile et native, puis « plus de vie » (éclosion, pétales qui s'envolent, reflet doré, score qui défile).
+- **Retirés** : le relief « gelée » et « creux », les pastilles de statut, l'en-tête pervenche qui respire, la pilule d'onglets maison, la rotation de la fleur à chaque saisie.
+- **Sommeil** : une fois la nuit notée, le bouton principal affiche « Noté : 7h30 » ; c'est un menu qui permet de changer la valeur. Les choix rapides d'une valeur du jour passent par `.replace` (pas de bascule).
+- **Comptage** : « +1 » en bouton plein, « − » à côté, grisé quand le jour est à 0.
+- **Statuts** : texte coloré et symbole SF (✓ objectif atteint, = limite atteinte, ! dépassée), pour ne jamais dépendre de la couleur seule.
+- **Résumé** : `Habit.summaryRank` (0, 1, 2 ; nouveau champ optionnel, compatible CloudKit, donc synchronisé). Sans choix, ce sont les trois premiers objectifs, puis les limites. Les habitudes par défaut mettent Sommeil, Eau et Sport en avant. Pour une limite, la marguerite montre ce qui reste (choix de Léa).
+- **Frise** : chaque jour montre la part des habitudes quotidiennes tenues ; le cœur est allumé quand toutes le sont.
+
+## Santé étendue (Garmin, Strava, Apple Watch via Santé)
+
+- **Pas de connexion directe** à Garmin ou Strava : il faudrait un partenariat développeur et un serveur pour les clés, contraire au brief (« pas de compte, pas de serveur »). Garmin Connect et Strava écrivent dans Santé ; Rituel lit Santé.
+- **Source par habitude** (`healthSource`), au lieu de l'ancien interrupteur global, migré automatiquement vers l'habitude Sommeil :
+  - sommeil réel (h, valeur du jour) ;
+  - séances de sport (nombre par jour, type d'activité facultatif, durée minimale facultative) ;
+  - eau (ml) ;
+  - pas ;
+  - minutes de pleine conscience.
+
+  Seules les sources compatibles avec la mesure de l'habitude sont proposées. Une source qui ne correspond plus après un changement d'unité est retirée à l'enregistrement.
+- **Import** : au lancement, au retour au premier plan et à l'enregistrement d'une habitude reliée. Les 7 derniers jours sont relus (pour les habitudes à la semaine) ; le sommeil ne concerne que la nuit qui se termine ce matin. Les pas et l'eau passent par `HKStatisticsCollectionQuery` (somme dédoublonnée entre montre et iPhone). Une saisie à la main n'est jamais écrasée.
+- **Permission** : demandée seulement pour la donnée choisie, au moment d'enregistrer l'habitude, en lecture seule. Le texte d'usage Santé couvre maintenant les cinq données.
+- **Modèles** dans la feuille de création : « Pas : au moins 10000 pas par jour » (relié à Santé), « Méditation » (pleine conscience), « Lecture ».

@@ -67,7 +67,7 @@ struct TodayWidgetView: View {
                 .foregroundStyle(.accentInk)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
-                .background { Pebble(shape: Capsule(), base: .accent, lifted: false, glows: true) }
+                .background(Color.accent, in: Capsule())
                 .accessibilityLabel(Text(verbatim: "Équilibre de la semaine, \(entry.data.score) %"))
             }
             VStack(spacing: 6) {
@@ -96,7 +96,7 @@ private struct CompactTile: View {
         }
         .padding(.horizontal, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .raisedSurface(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(Color.canvas, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
 
@@ -121,7 +121,7 @@ private struct LargeRow: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
-        .raisedSurface(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(Color.canvas, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
 

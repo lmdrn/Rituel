@@ -6,8 +6,8 @@ import WidgetKit
 struct WidgetBackdrop: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            LinearGradient(colors: [.surfaceHigh, .canvas], startPoint: .top, endPoint: .bottom)
-            RadialGradient(colors: [Color.accent.opacity(0.14), .clear], center: .topTrailing, startRadius: 0, endRadius: 200)
+            Color.surface
+            RadialGradient(colors: [Color.accent.opacity(0.08), .clear], center: .topTrailing, startRadius: 0, endRadius: 200)
             DaisyPetals()
                 .fill(Color.accent.opacity(0.06))
                 .frame(width: 140, height: 140)
@@ -21,7 +21,7 @@ struct WidgetDaisy: View {
     let habit: WidgetHabit
 
     var body: some View {
-        Daisy(filled: Int((habit.fraction * 7).rounded(.down)), tint: habit.spec.color.color, heartLit: habit.status.tone == .done)
+        Daisy(habit: habit.spec, total: habit.total, blooms: false)
             .widgetAccentable()
             .accessibilityHidden(true)
     }
@@ -43,7 +43,7 @@ struct QuickButton: View {
                 .foregroundStyle(.accentInk)
                 .padding(.horizontal, 4)
                 .frame(width: size, height: size)
-                .background { Pebble(shape: Circle(), base: .accent, lifted: false, glows: true) }
+                .background(Color.accent, in: Circle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(verbatim: "Noter \(habit.spec.name), \(habit.quick.label)"))
@@ -120,6 +120,6 @@ struct WidgetChip: View {
             .foregroundStyle(status.tone.colors.fg)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background { Well(shape: Capsule(), color: status.tone.colors.bg) }
+            .background(status.tone.colors.bg, in: Capsule())
     }
 }

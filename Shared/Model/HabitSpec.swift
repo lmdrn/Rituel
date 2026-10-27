@@ -33,6 +33,73 @@ enum EntryMode: String, Codable, CaseIterable, Sendable {
     case add
 }
 
+/// Donnée de l'app Santé qui peut remplir une habitude. Garmin Connect, Strava ou l'Apple Watch y écrivent ;
+/// Rituel ne lit que Santé, sans compte ni serveur.
+enum HealthSource: String, Codable, CaseIterable, Identifiable, Sendable {
+    /// Sommeil réel (phases de sommeil), en heures, valeur du jour.
+    case sleep
+    /// Nombre de séances de sport du jour.
+    case workouts
+    /// Eau bue, en ml.
+    case water
+    /// Nombre de pas.
+    case steps
+    /// Minutes de pleine conscience.
+    case mindful
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .sleep: "Sommeil"
+        case .workouts: "Séances de sport"
+        case .water: "Eau"
+        case .steps: "Pas"
+        case .mindful: "Pleine conscience"
+        }
+    }
+
+    /// Ce que l'habitude doit mesurer pour recevoir cette donnée.
+    var measure: HabitMeasure { self == .workouts ? .count : .amount }
+    var unit: String? {
+        switch self {
+        case .sleep: "h"
+        case .workouts: nil
+        case .water: "ml"
+        case .steps: "pas"
+        case .mindful: "min"
+        }
+    }
+    var entryMode: EntryMode { self == .sleep ? .set : .add }
+
+    /// Source qui correspond naturellement à une habitude (pour la proposer dans la feuille).
+    static func suggested(for habit: HabitSpec) -> HealthSource? {
+        allCases.first { $0.fits(habit) && ($0 != .workouts || habit.name.lowercased().contains("sport")) }
+    }
+
+    func fits(_ habit: HabitSpec) -> Bool {
+        habit.measure == measure && (unit == nil || habit.trimmedUnit == unit)
+    }
+}
+
+/// Types de séances proposés pour filtrer le sport.
+enum WorkoutKind: String, Codable, CaseIterable, Identifiable, Sendable {
+    case running, cycling, walking, swimming, strength, yoga
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .running: "Course"
+        case .cycling: "Vélo"
+        case .walking: "Marche"
+        case .swimming: "Natation"
+        case .strength: "Renforcement"
+        case .yoga: "Yoga"
+        }
+    }
+}
+
 /// Copie immuable d'une habitude, utilisée par le moteur, les vues et le widget.
 struct HabitSpec: Identifiable, Hashable, Sendable {
     static let maxNameLength = 40
@@ -51,6 +118,13 @@ struct HabitSpec: Identifiable, Hashable, Sendable {
     var sortIndex: Int = 0
     /// Rappel quotidien, en minutes depuis minuit.
     var reminderMinutes: Int?
+    /// Place dans le résumé d'Aujourd'hui (0, 1, 2), ou `nil` si l'habitude n'y figure pas.
+    var summaryRank: Int?
+    /// Donnée Santé qui remplit l'habitude automatiquement, ou `nil` pour une saisie à la main seulement.
+    var healthSource: HealthSource?
+    /// Pour les séances de sport : durée minimale en minutes (0 = toutes) et type d'activité (`nil` = tous).
+    var healthMinMinutes: Int = 0
+    var healthWorkoutKind: WorkoutKind?
 
     var isAmount: Bool { measure == .amount }
     var trimmedUnit: String { (unit ?? "").trimmingCharacters(in: .whitespaces) }

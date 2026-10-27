@@ -83,3 +83,37 @@ struct HabitDraftTests {
         #expect(draft.previewText == "Sport au moins 3 fois par semaine.")
     }
 }
+
+struct HabitDraftHealthTests {
+    @Test func templateKeepsIdentityAndPlace() throws {
+        var draft = HabitDraft(newWithSortIndex: 6)
+        let id = draft.id
+        draft.apply(template: HabitSpec.templates[0])
+        #expect(draft.id == id)
+        #expect(draft.spec.sortIndex == 6)
+        #expect(draft.spec.name == "Pas")
+        #expect(draft.spec.healthSource == .steps)
+        #expect(draft.presetsText == "2000  5000  8000  10000")
+        #expect(try #require(draft.finalized()).healthSource == .steps)
+    }
+
+    @Test func incompatibleSourceIsDroppedOnSave() throws {
+        var draft = HabitDraft(editing: DefaultHabits.specs[0])
+        draft.setHealthSource(.sleep)
+        #expect(draft.compatibleHealthSources == [.sleep])
+        draft.setUnit("min")
+        #expect(try #require(draft.finalized()).healthSource == nil)
+    }
+
+    @Test func workoutFiltersOnlyForWorkouts() throws {
+        var draft = HabitDraft(editing: DefaultHabits.specs[4])
+        draft.setHealthSource(.workouts)
+        draft.setHealthMinMinutes(20)
+        draft.setHealthWorkoutKind(.running)
+        let spec = try #require(draft.finalized())
+        #expect(spec.healthMinMinutes == 20)
+        #expect(spec.healthWorkoutKind == .running)
+        draft.setHealthSource(nil)
+        #expect(try #require(draft.finalized()).healthMinMinutes == 0)
+    }
+}
