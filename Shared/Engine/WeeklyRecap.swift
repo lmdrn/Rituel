@@ -38,7 +38,61 @@ struct WeekRecap: Sendable {
     var title: String { RecapEngine.title(score: score) }
 }
 
+/// Case de la grille « Jour par jour ».
+enum HeatCellState: Sendable {
+    /// Jour tenu (habitudes quotidiennes).
+    case ok
+    /// Jour raté (habitudes quotidiennes).
+    case over
+    /// Quelque chose de noté, sans jugement (habitudes à la semaine ou au mois, objectif pas encore atteint).
+    case hit
+    case empty
+    case future
+}
+
+extension RecapState {
+    var word: String {
+        switch self {
+        case .kept: "tenu"
+        case .progress: "en cours"
+        case .work: "à travailler"
+        }
+    }
+}
+
 enum RecapEngine {
+    static func heatCell(_ habit: HabitSpec, value: Double, day: Date, today: Date) -> HeatCellState {
+        if day > today { return .future }
+        guard habit.period == .day else { return value > 0 ? .hit : .empty }
+        if habit.kind == .limit { return HabitEngine.isDayKept(habit, value: value) ? .ok : .over }
+        if HabitEngine.isDayKept(habit, value: value) { return .ok }
+        return value > 0 ? .hit : .empty
+    }
+
+    /// Consigne pour le modèle sur l'appareil : 3 ou 4 phrases douces à partir du récap.
+    static func notePrompt(_ recap: WeekRecap, name: String, calendar: RituelCalendar) -> String {
+        let who = name.trimmingCharacters(in: .whitespaces)
+        let lines = recap.rows.map { row in
+            "- \(row.habit.name) (\(HabitEngine.ruleText(row.habit))) : \(row.detail) [\(row.state.word)]"
+        }.joined(separator: "\n")
+        return """
+        Tu écris pour \(who.isEmpty ? "une personne" : who), qui suit ses habitudes pour avoir une routine et baisser son anxiété. \
+        Voici son récap de la semaine du \(calendar.shortDate(recap.weekStart)) (score d'équilibre \(recap.score) %) :
+        \(lines)
+
+        Écris-lui 3 ou 4 phrases en français, en la tutoyant. Ton doux, bienveillant, concret, jamais culpabilisant. \
+        Salue une réussite précise, propose une seule petite action pour la semaine suivante. \
+        Pas de liste, pas d'emoji, pas de tiret cadratin, pas de titre. Réponds uniquement avec le texte.
+        """
+    }
+
+    /// Nettoie la réponse du modèle : pas de tiret cadratin, pas d'espaces superflus.
+    static func cleanNote(_ text: String) -> String {
+        text.replacingOccurrences(of: " — ", with: ", ")
+            .replacingOccurrences(of: "—", with: ",")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     static let limitTips = [
         "Repère le moment où l'envie arrive et prépare une alternative à portée de main.",
         "Décide à l'avance du jour où tu te l'accordes, ça le rend plus savoureux.",

@@ -13,6 +13,7 @@
 		11F40FE60B5BCE4108A46133 /* EntryLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2AE5C187FBAD5F080C92CD /* EntryLog.swift */; };
 		17101CA5BF81335E6862FD08 /* HabitPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884CEC52D10CB7531077BB7 /* HabitPalette.swift */; };
 		1887DEED2A8EC721F73F0C97 /* OFL-Figtree.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2613B3F215EFCE94F7BBF3EC /* OFL-Figtree.txt */; };
+		1A84A93C60603C89C066C39A /* RecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9724BEBE567D44E0EB7EF3 /* RecapView.swift */; };
 		1CC737FDB10FD199C6543742 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E0532F7A3F6C6680F3AF1E /* RootView.swift */; };
 		209FAF2CB28F152EF9CC2086 /* DesignSystem.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A52B1BF857A6D660EC1C9DD /* DesignSystem.xcassets */; };
 		217B4D44DEE479AC2A5D7B74 /* Figtree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF2EB9ACF6A65BE7BB08417 /* Figtree-Bold.ttf */; };
@@ -70,6 +71,7 @@
 		C93885DE4830EFAFDA2B7376 /* BrandHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4567151B3D2BA11D140DA5F /* BrandHeader.swift */; };
 		D02A068BC9E21B34556F6423 /* SoftWaves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7E9D919E160C0330F089DB /* SoftWaves.swift */; };
 		D093B05FEA433B69F938EBC0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F158B784514A47AE7D04286E /* PrivacyInfo.xcprivacy */; };
+		D14E529AB80BD2AAAD73C490 /* WeeklyNoteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D574F6691421653242EA78 /* WeeklyNoteWriter.swift */; };
 		DC6C57EAD4F1798497ED6531 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D0236D3FB3E55606E9CDB7 /* Theme.swift */; };
 		E34D62941B5BC4D0564D9A45 /* DefaultHabits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336A4BD5D1AF78E665235A2F /* DefaultHabits.swift */; };
 		E3F081E15D72F1EDC0E0BC0A /* HabitSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A5061F977A3A9AF9CFD7C /* HabitSpec.swift */; };
@@ -144,6 +146,7 @@
 		6C8733B04A7E1649C8569154 /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		794BFEADBC2568A7D6433E46 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		7C27A54812417AA04EB69695 /* WeekStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekStrip.swift; sourceTree = "<group>"; };
+		7D9724BEBE567D44E0EB7EF3 /* RecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecapView.swift; sourceTree = "<group>"; };
 		7E7E9D919E160C0330F089DB /* SoftWaves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftWaves.swift; sourceTree = "<group>"; };
 		88398E487E9C01A0064EB18E /* RituelWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RituelWidgetsBundle.swift; sourceTree = "<group>"; };
 		9027EEBD175765C4E47A8B8B /* WeeklyRecap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyRecap.swift; sourceTree = "<group>"; };
@@ -162,6 +165,7 @@
 		CA50742E1ACB5FE3887EE591 /* HabitDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDraft.swift; sourceTree = "<group>"; };
 		CB497A2382840833B6574821 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		D01F566D604F6695F1338156 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
+		D2D574F6691421653242EA78 /* WeeklyNoteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyNoteWriter.swift; sourceTree = "<group>"; };
 		D50A4589CBC642B6E6A9AF87 /* HabitEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditorSheet.swift; sourceTree = "<group>"; };
 		DDAA6F458F22D0E1F9AD67EF /* Rituel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rituel.entitlements; sourceTree = "<group>"; };
 		E018F21EF6DA572934A4F369 /* OFL-Fraunces.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Fraunces.txt"; sourceTree = "<group>"; };
@@ -174,7 +178,7 @@
 		F4567151B3D2BA11D140DA5F /* BrandHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandHeader.swift; sourceTree = "<group>"; };
 		F5AFED06F1663711683F9B89 /* HabitDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDraftTests.swift; sourceTree = "<group>"; };
 		F8B1DCD73FBB6B6FC8A7992F /* RituelTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RituelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		"TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		"TEMP_4292190F-5046-4108-9DC7-7AAE0E98437B" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -223,11 +227,20 @@
 				B7E842643E4E083B6465784B /* App */,
 				63B2C044AC57F9337B447A3C /* Preview Content */,
 				5F76A4D210D8C9622D6F6B35 /* Resources */,
+				CDD1B2A2AD583A5F0E1B70BE /* Services */,
 				6AF3C87675A1B9B1EB1F09EF /* Views */,
 				0F7B693F94B5F9127C8906A8 /* Info.plist */,
 				DDAA6F458F22D0E1F9AD67EF /* Rituel.entitlements */,
 			);
 			path = Rituel;
+			sourceTree = "<group>";
+		};
+		23393D29E4A795BE1E50BD08 /* Recap */ = {
+			isa = PBXGroup;
+			children = (
+				7D9724BEBE567D44E0EB7EF3 /* RecapView.swift */,
+			);
+			path = Recap;
 			sourceTree = "<group>";
 		};
 		5F76A4D210D8C9622D6F6B35 /* Resources */ = {
@@ -253,6 +266,7 @@
 			children = (
 				7CE13A29B8A5F2C9C9B11818 /* Components */,
 				A0B54D95C93D887436F167AD /* Habits */,
+				23393D29E4A795BE1E50BD08 /* Recap */,
 				13D334FC249BB00D1F8EFA63 /* Today */,
 			);
 			path = Views;
@@ -324,6 +338,14 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		CDD1B2A2AD583A5F0E1B70BE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D2D574F6691421653242EA78 /* WeeklyNoteWriter.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		D40C88AD0C3C6175EBFDAE15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,10 +399,10 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
-		"TEMP_CC7F2DEB-8C33-4D58-A14F-6BE928B175A1" /* rituel */ = {
+		"TEMP_1062BCB0-8BF8-4350-9D41-82DE17C4E304" /* rituel */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */,
+				"TEMP_4292190F-5046-4108-9DC7-7AAE0E98437B" /* Config.xcconfig */,
 			);
 			path = rituel;
 			sourceTree = "<group>";
@@ -564,6 +586,7 @@
 				2B3CDE769CA33EDB468CCC4E /* HabitsView.swift in Sources */,
 				C4432E2F78D168C3ECF3AD13 /* PreviewData.swift in Sources */,
 				73C341B3B684AA797C31FD48 /* QuantityFormat.swift in Sources */,
+				1A84A93C60603C89C066C39A /* RecapView.swift in Sources */,
 				58839CD40662EFCC98582D7F /* RituelApp.swift in Sources */,
 				FCD23C643E911756B54F158B /* RituelCalendar.swift in Sources */,
 				4FAA3CE4B693D5BA85C9D639 /* RituelStore.swift in Sources */,
@@ -574,6 +597,7 @@
 				FD25D4130281D93047A27460 /* TodayView.swift in Sources */,
 				844AF69FBD053545F9763717 /* Typography.swift in Sources */,
 				97178A1A86A8B301E3E7123A /* WeekStrip.swift in Sources */,
+				D14E529AB80BD2AAAD73C490 /* WeeklyNoteWriter.swift in Sources */,
 				470AB946B42FB422AC9D4673 /* WeeklyRecap.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -637,7 +661,7 @@
 		};
 		36F0C037FCAA4E34EDECBD25 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_4292190F-5046-4108-9DC7-7AAE0E98437B" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
@@ -766,7 +790,7 @@
 		};
 		EC6D07AA73BDB67E0B69B8FF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_1F3F27D6-92E4-4758-881C-5A7F34C395D2" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_4292190F-5046-4108-9DC7-7AAE0E98437B" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;

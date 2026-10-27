@@ -37,7 +37,7 @@ struct RootView: View {
                         startNewHabit = true
                         tab = .habits
                     }
-                case .recap: ComingSoonView(eyebrow: "Récap de la semaine", title: "Bientôt ton récap")
+                case .recap: RecapView()
                 case .habits: HabitsView(startNew: $startNewHabit)
                 }
             }
@@ -74,24 +74,6 @@ struct RootView: View {
         }
     }
     #endif
-}
-
-/// Onglets des étapes 4 et 5, en attendant.
-private struct ComingSoonView: View {
-    let eyebrow: LocalizedStringKey
-    let title: LocalizedStringKey
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 2) {
-                BrandHeader().padding(.bottom, 14)
-                Text(eyebrow).eyebrow()
-                Text(title).font(.rituelLargeTitle).foregroundStyle(.ink)
-            }
-            .padding(.horizontal, Metrics.gutter)
-            .padding(.top, 16)
-        }
-    }
 }
 
 #Preview("Clair") {

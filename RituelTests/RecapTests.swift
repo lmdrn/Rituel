@@ -101,6 +101,27 @@ struct RecapTests {
         #expect(RecapEngine.title(score: 34) == "On repart en douceur")
     }
 
+    @Test func heatCells() {
+        #expect(RecapEngine.heatCell(Sample.cafe, value: 0, day: monday, today: wednesday) == .ok)
+        #expect(RecapEngine.heatCell(Sample.cafe, value: 2, day: monday, today: wednesday) == .over)
+        #expect(RecapEngine.heatCell(Sample.sommeil, value: 6, day: monday, today: wednesday) == .hit)
+        #expect(RecapEngine.heatCell(Sample.sommeil, value: 0, day: monday, today: wednesday) == .empty)
+        #expect(RecapEngine.heatCell(Sample.sommeil, value: 8, day: monday, today: wednesday) == .ok)
+        #expect(RecapEngine.heatCell(Sample.sport, value: 1, day: monday, today: wednesday) == .hit)
+        #expect(RecapEngine.heatCell(Sample.sport, value: 0, day: day(2026, 10, 30), today: wednesday) == .future)
+    }
+
+    @Test func notePromptDescribesTheWeek() {
+        let l = log([(Sample.sport, monday, 3)])
+        let recap = RecapEngine.recap([Sample.sport], weekStart: monday, log: l, today: wednesday)
+        let prompt = RecapEngine.notePrompt(recap, name: "Léa", calendar: paris)
+        #expect(prompt.contains("Tu écris pour Léa"))
+        #expect(prompt.contains("semaine du 26 oct."))
+        #expect(prompt.contains("- Sport (Au moins 3 fois par semaine) : Objectif atteint. [tenu]"))
+        #expect(RecapEngine.notePrompt(recap, name: "", calendar: paris).contains("Tu écris pour une personne"))
+        #expect(RecapEngine.cleanNote("  Bravo — tu as tenu.\n") == "Bravo, tu as tenu.")
+    }
+
     @Test func tipIsStableForAHabitAndAWeek() {
         let a = RecapEngine.tip(for: Sample.sport, weekStart: monday, calendar: paris)
         #expect(a == RecapEngine.tip(for: Sample.sport, weekStart: monday, calendar: paris))

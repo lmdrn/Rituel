@@ -70,3 +70,11 @@ Choix faits là où le brief ne tranchait pas. Classés par étape.
 - **Réglages** : le prénom (40 caractères au plus) et les interrupteurs « Sommeil depuis Santé » et « Rappels » sont enregistrés dans l'App Group. Les deux interrupteurs n'ont pas encore d'effet : ils seront branchés à l'étape 7. L'état de synchro affiche « Enregistré sur cet appareil » jusqu'à l'étape 8.
 - **Écran Aujourd'hui vide** : le bouton « Créer une habitude » ouvre l'onglet Habitudes avec la feuille déjà ouverte.
 - **Options de lancement en debug** : `-RituelTab habits|recap` et `-RituelNewHabit YES`, pour les captures.
+
+## Étape 5 — Récap
+
+- **Données chargées** : du 1er du mois du lundi jusqu'au dimanche. Le mois évalué est celui du dernier jour de la semaine, qui peut commencer avant le lundi affiché.
+- **Grille « Jour par jour »** (`RecapEngine.heatCell`, testé) : pour une habitude quotidienne, vert si le jour est tenu, corail s'il est raté. Pour un objectif quotidien pas encore atteint, la case prend la couleur de l'habitude, sans jugement. Pour les habitudes à la semaine ou au mois, la case prend la couleur de l'habitude dès qu'il y a une saisie. Comme sur le web.
+- **Grand chiffre du score** : en terracotta `accentText` (le pêche n'est pas assez contrasté pour du texte). Les 20 points sont en pêche, et en soleil à partir du 15ᵉ.
+- **« Un mot pour ta semaine »** : `WeeklyNoteWriter` utilise Foundation Models (`LanguageModelSession`) sous `#if canImport(FoundationModels)` et `if #available(iOS 26.0, *)`. Le bloc n'apparaît que si le modèle est disponible (Apple Intelligence activé) **et** qu'il gère le français. Sinon il est masqué, comme le demande le brief. Le mot n'est écrit que sur demande (bouton « Écrire mon mot »), jamais automatiquement : la génération prend quelques secondes. Le tiret cadratin est remplacé par une virgule, comme sur le web. La consigne est construite par `RecapEngine.notePrompt` (testé). Sans prénom réglé, elle parle d'« une personne ».
+- **VoiceOver** : la carte score se lit d'un bloc. Chaque ligne de la grille se lit en une phrase (« Sommeil : lundi 7h30, mardi 8h »).
